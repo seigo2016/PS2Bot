@@ -1,0 +1,18 @@
+[NC / DNC] NCの役職の付与/削除　
+[TR / DTR] TRの役職の付与/削除 
+[VS / DVS] VSの役職の付与/削除 
+[NS / DNS] NSの役職の付与/削除 
+[MALL / DMALL] Mercenary役職の追加/削除
+[MNC / DMNC] MainNCの役職の付与/削除 
+[MTR / DMTR] MainTRの役職の付与/削除 
+[MVS / DMVS] MainVSの役職の付与/削除
+[Connery / DConnery]Connery鯖Playerの役職の付与/削除
+[Briggs / DBriggs]Briggs鯖Playerの役職の付与/削除
+[Emerald / DEmerald]Emerald鯖Playerの役職の付与/削除
+[Miller/ DMiller]Miller鯖Playerの役職の付与/削除
+[Soltech / DSoltech]Soltech鯖Playerの役職の付与/削除
+[JPST (xx:xx)]調べたい日本時間のPST時刻を表示します
+[JPDT (xx:xx)]調べたい日本時間のPDT時刻を表示します
+[PST (xx:xx)]PST時刻から日本時間を表示します
+[PDT (xx:xx)]PDT時刻から日本時間を表示します
+[!NOW]現在のJDT、PDT,PSTを表示します
