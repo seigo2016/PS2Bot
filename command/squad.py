@@ -1,11 +1,16 @@
 # coding:utf-8
 import discord
 import configparser
+import os
+
 client = discord.Client()
 
-config = configparser.ConfigParser()
-config.read('setting.ini')
-token = config.get("token", 'token')
+token = os.environ['token']
+if not len(token):
+    config = configparser.ConfigParser()
+    config.read('setting.ini')
+    token = config.get("token", 'token')
+
 
 typename = ""
 
