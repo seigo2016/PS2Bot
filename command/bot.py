@@ -17,18 +17,18 @@ async def on_message(message):
         co = discord.Color.blue()
         em = discord.Embed(title='Help', description="\n\n" + data, colour=co)
         await message.channel.send(embed=em)
-    if message.content.startswith('PDT') or message.content.startswith('PST') or message.content.startswith('JPDT') or message.content.startswith('JPST'):
+    elif message.content.startswith('PDT') or message.content.startswith('PST') or message.content.startswith('JPDT') or message.content.startswith('JPST'):
         timec = message.content.split()
         chtime2 = timec[1]
         timec2 = chtime2.split(':')
         chhour = int(timec2[0])
         if message.content.startswith('JPDT'):
             chhour = chhour - 16
-        if message.content.startswith('JPST'):
+        elif message.content.startswith('JPST'):
             chhour = chhour - 17
-        if message.content.startswith('PST'):
+        elif message.content.startswith('PST'):
             chhour = chhour + 17
-        if message.content.startswith('PDT'):
+        elif message.content.startswith('PDT'):
             chhour = chhour + 16
         mi = int(timec2[1])
         if(chhour < 0):
@@ -40,7 +40,7 @@ async def on_message(message):
         if (mi < 10 and chhour < 10 and chhour <= 24):
             chhour = str(chhour)
             mi = str(mi)
-            await message.channel.send("0" + chhour + ":" + "0" + mi)
+            await message.channel.send("0" + chhour + ":0" + mi)
         elif (mi >= 10 and chhour < 10 and chhour <= 24):
             chhour = str(chhour)
             mi = str(mi)
@@ -48,14 +48,14 @@ async def on_message(message):
         elif (mi < 10 and chhour >= 10 and chhour <= 24):
             chhour = str(chhour)
             mi = str(mi)
-            await message.channel.send(chhour + ":" + "0" + mi)
+            await message.channel.send(chhour + ":0" + mi)
         elif(mi <= 59 and chhour <= 24):
             chhour = str(chhour)
             mi = str(mi)
             await message.channel.send(chhour + ":" + mi)
         else:
             await message.channel.send("正しく入力してください")
-    if message.content.startswith('NOW'):
+    elif message.content.startswith('NOW'):
         dtime = datetime.datetime.now()
         pdtime = dtime + datetime.timedelta(hours=- 16)
         pstime = dtime + datetime.timedelta(hours=- 17)

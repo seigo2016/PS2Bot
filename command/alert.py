@@ -6,20 +6,16 @@ from bs4 import BeautifulSoup
 import urllib
 import dateutil.parser
 import pytz
+import configparser
 import matplotlib.pyplot as plt
 import numpy as np
 client = discord.Client()
-msg = ""
 
-l = 0
-messageid = ""
-titles = []
-links = []
-linksr = []
-descriptions = []
-json_str = {}
-pubdate = []
 alltitles = {1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "s", 8: "", 9: ""}
+
+config = configparser.ConfigParser()
+config.read('setting.ini')
+token = config.get("token", 'token')
 
 
 def is_me(m):

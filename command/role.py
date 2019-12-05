@@ -25,21 +25,17 @@ async def on_message(message):
             client.get_guild(344369434103906314).roles, name=val)
     if str(message.channel).find('irassyai-channel') != -1:
         is_rolech = True
-    if str(message.channel).find('test') != -1:
+    elif str(message.channel).find('test') != -1:
         is_rolech = True
     if not message.author.bot and is_rolech:
         text = message.content.upper()
         text = text.split()
-        i = 0
-        while (i != len(text)):
-            j = 0
-            while (j != len(add_role)):
-                if text[i] == list(add_role.keys())[j]:
-                    addrolelist.append(rolelist[text[i]])
-                if text[i] == list(rm_role.keys())[j]:
-                    rmrolelist.append(rolelist[rm_role[text[i]].upper()])
-                j += 1
-            i += 1
+        for i in text:
+            for j in range(len(add_role)):
+                if i == list(add_role.keys())[j]:
+                    addrolelist.append(rolelist[i])
+                if i == list(rm_role.keys())[j]:
+                    rmrolelist.append(rolelist[rm_role[i].upper()])
         if len(addrolelist):
             await message.author.add_roles(*addrolelist)
         if len(rmrolelist):
@@ -47,7 +43,6 @@ async def on_message(message):
         for j in addrolelist:
             await message.author.add_roles(j)
             addmsg += str(j) + '\n'
-
         for k in rmrolelist:
             rmmsg += str(k) + '\n'
         if len(addmsg) != 1 or len(rmmsg) != 1:
