@@ -62,13 +62,13 @@ async def on_ready():
     tr_pop = response_json["tr"]
     vs_pop = response_json["vs"]
     ns_pop = response_json["ns"]
-    all_pop = int(nc_pop) + int(tr_pop) + int(vs_pop) + (ns_pop)
+    all_pop = nc_pop + tr_pop + vs_pop + ns_pop
     colorlist = ["b", "red", "purple", "gray"]
     updatetime = response_json["timestamp"]
     updatetime = datetime.datetime.fromtimestamp(updatetime).astimezone(jst)
-    label = ["NC  " + nc_pop, "TR  " + tr_pop,
-             "VS  " + vs_pop, "NS  " + ns_pop]
-    x = np.array([int(nc_pop), int(tr_pop), int(vs_pop), int(ns_pop)])
+    label = ["NC  " + str(nc_pop), "TR  " + str(tr_pop),
+             "VS  " + str(vs_pop), "NS  " + str(ns_pop)]
+    x = np.array([nc_pop, tr_pop, vs_pop, ns_pop])
     fig = plt.figure(figsize=(3, 3))
     fig.patch.set_alpha(0.0)
     plt.subplot(1, 1, 1)
