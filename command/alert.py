@@ -56,18 +56,27 @@ async def on_ready():
     api_url = 'https://ps2.fisu.pw/api/population/?world=40'
     readObj = urllib.request.urlopen(api_url)
     response = readObj.read()
-    response_json = json.loads(response)["result"]
+    response_json = json.loads(response)["result"][0]
     print(response_json)
-    # label = ["NC  " + text7, "TR  " + text8, "VS  " + text6, "VS  " + ]
-    # x = np.array([int(text7), int(text8), int(text6)])
-    # fig = plt.figure(figsize=(3, 3))
-    # fig.patch.set_alpha(0.0)
-    # plt.subplot(1, 1, 1)
-    # plt.pie(x, labels=label, colors=colorlist)
-    # plt.title('Soltech Pop \n(All:' + str(text4) + 'Last Updated' + str(now.hour) +
-    #           ':' + str(now.minute) + ':' + str(now.second) + ')', fontsize=10)
+    nc_pop = response_json["nc"]
+    tr_pop = response_json["tr"]
+    vs_pop = response_json["vs"]
+    ns_pop = response_json["ns"]
+    all_pop = int(nc_pop) + int(tr_pop) + int(vs_pop) + (ns_pop)
+    colorlist = ["b", "red", "purple", "gray"]
+    updatetime = response_json["time"]
+    updatetime = datetime.datetim.fromtimestamp(updatetime).astimezone(jst)
+    label = ["NC  " + nc_pop, "TR  " + tr_pop,
+             "VS  " + vs_pop, "NS  " + ns_pop]
+    x = np.array([int(nc_pop), int(tr_pop), int(vs_pop), int(ns_pop)])
+    fig = plt.figure(figsize=(3, 3))
+    fig.patch.set_alpha(0.0)
+    plt.subplot(1, 1, 1)
+    plt.pie(x, labels=label, colors=colorlist)
+    plt.title('Soltech Pop \n(All:' + str(all_pop) +
+              str(updatetime), fontsize=10)
 
-    # plt.savefig('pop.png')
+    plt.savefig('pop.png')
     em = discord.Embed(
         title='Event Information',
         description=almessage,
@@ -75,5 +84,5 @@ async def on_ready():
     )
     await client.get_guild(344369434103906314).get_channel(387540823551639552).purge(limit=2)
     await client.get_guild(344369434103906314).get_channel(387540823551639552).send(embed=em)
-    # await client.get_guild(344369434103906314).get_channel(387540823551639552).send(file=discord.File('pop.png'))
+    await client.get_guild(344369434103906314).get_channel(387540823551639552).send(file=discord.File('pop.png'))
 client.run(token)
