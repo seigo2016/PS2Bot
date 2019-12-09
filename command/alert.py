@@ -64,7 +64,7 @@ async def on_ready():
     ns_pop = response_json["ns"]
     all_pop = int(nc_pop) + int(tr_pop) + int(vs_pop) + (ns_pop)
     colorlist = ["b", "red", "purple", "gray"]
-    updatetime = response_json["time"]
+    updatetime = response_json["timestamp"]
     updatetime = datetime.datetim.fromtimestamp(updatetime).astimezone(jst)
     label = ["NC  " + nc_pop, "TR  " + tr_pop,
              "VS  " + vs_pop, "NS  " + ns_pop]
