@@ -79,10 +79,10 @@ async def on_ready():
     now = datetime.datetime.now(jst)
     almessage = "Event Information\n 現在調整中"
     almessage = '\n'
-    for i, time in enumerate(event_time):
+    for i, time in enumerate(event_time).astimezone(jst):
         if time > now and not("[END]" in event_titles[i]):
-            almessage += "{}\n{}\n{}\n"\
-                .format(event_titles[i], description[i], time)
+            almessage += "{}-{} {}\n{}\n{}\n"\
+                .format(event_titles[i][0], event_titles[i][1], event_titles[i][2], description[i], time)
             # ---------Event Information part END---------#
 
     # colorlist = ["b", "red", "purple"]
