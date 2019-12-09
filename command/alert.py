@@ -29,7 +29,7 @@ def is_me(m):
 
 @client.event
 async def on_ready():
-    # ---------Event Information part END---------#
+    # ---------Event Information Part START---------#
     event_page = "http://ps2.fisu.pw/alert/rss"
     event_ret = requests.get(event_page)
     event_titles = []
@@ -45,14 +45,14 @@ async def on_ready():
         event_time.append(time_tmp)
     jst = pytz.timezone('Asia/Tokyo')
     now = datetime.datetime.now(jst)
-    event_body = "Event Information\n 現在調整中"
-    almessage = '\n'
+    event_body = "Event Information\n"
     for i, time in enumerate(event_time):
         time = time.astimezone(jst)
         if time > now and not("[END]" in event_titles[i]):
             event_body += "{} - {} {}\n{}\n{}\n----------------------------------------\n"\
                 .format(event_titles[i][0], event_titles[i][1], event_titles[i][2], description[i], time)
-    # ---------Event Information part END---------#
+    # ---------Event Information Part END---------#
+    # ---------Get Population Part START---------#
     api_url = 'https://ps2.fisu.pw/api/population/?world=40'
     readObj = urllib.request.urlopen(api_url)
     response = readObj.read()
@@ -73,16 +73,19 @@ async def on_ready():
     fig.patch.set_alpha(0.0)
     plt.subplot(1, 1, 1)
     plt.pie(x, labels=label, colors=colorlist)
-    plt.title('Soltech Pop \n(All:' + str(all_pop) +
-              str(updatetime), fontsize=10)
+    plt.title(
+        'Soltech Pop \nAll:{} {}'.format(all_pop, updatetime), fontsize=10)
 
     plt.savefig('pop.png')
+    # ---------Get Population Part END---------#
+    # ---------Send Message Part START---------#
     em = discord.Embed(
         title='Event Information',
-        description=almessage,
+        description=event_body,
         color=discord.Color.orange(),
     )
     await client.get_guild(344369434103906314).get_channel(387540823551639552).purge(limit=2)
     await client.get_guild(344369434103906314).get_channel(387540823551639552).send(embed=em)
     await client.get_guild(344369434103906314).get_channel(387540823551639552).send(file=discord.File('pop.png'))
+    # ---------Send Message Part END---------#
 client.run(token)
