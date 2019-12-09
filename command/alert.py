@@ -79,7 +79,6 @@ async def on_ready():
         event_time.append(time_tmp)
     jst = pytz.timezone('Asia/Tokyo')
     now = datetime.datetime.now(jst)
-    now = jst.localize(now)
     almessage = "Event Information\n 現在調整中"
     almessage = '\n'
     # if alerttime[0] > now or alerttime[1] > now or alerttime[2] > now:
