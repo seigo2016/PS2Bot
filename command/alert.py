@@ -45,19 +45,20 @@ async def on_ready():
         event_time.append(time_tmp)
     jst = pytz.timezone('Asia/Tokyo')
     now = datetime.datetime.now(jst)
-    almessage = "Event Information\n 現在調整中"
+    event_body = "Event Information\n 現在調整中"
     almessage = '\n'
     for i, time in enumerate(event_time):
         time = time.astimezone(jst)
         if time > now and not("[END]" in event_titles[i]):
-            almessage += "{} - {} {}\n{}\n{}\n----------------------------------------\n"\
+            event_body += "{} - {} {}\n{}\n{}\n----------------------------------------\n"\
                 .format(event_titles[i][0], event_titles[i][1], event_titles[i][2], description[i], time)
     # ---------Event Information part END---------#
     api_url = 'https://ps2.fisu.pw/api/population/?world=40'
     readObj = urllib.request.urlopen(api_url)
     response = readObj.read()
-    print(response)
-    # label = ["NC  " + text7, "TR  " + text8, "VS  " + text6]
+    response_json = json.loads(response)["result"]
+    print(response_json)
+    # label = ["NC  " + text7, "TR  " + text8, "VS  " + text6, "VS  " + ]
     # x = np.array([int(text7), int(text8), int(text6)])
     # fig = plt.figure(figsize=(3, 3))
     # fig.patch.set_alpha(0.0)
