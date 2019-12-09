@@ -65,13 +65,12 @@ async def on_ready():
     event_page = "http://ps2.fisu.pw/alert/rss"
     event_ret = requests.get(event_page)
     event_titles = []
-    legion = []
     description = []
     event_time = []
+    body = []
     alertsoup = BeautifulSoup(event_ret.content, "html.parser")
     for alertitem in alertsoup.find_all("item"):
         event_titles.append(alertitem.find("title").string.split())
-        legion.append(alertitem.find("fisupw:starter_faction").string)
         description.append(alertitem.find("description").string)
         time_tmp = alertitem.find("pubdate").string
         time_tmp = dateutil.parser.parse(time_tmp) + \
@@ -81,35 +80,16 @@ async def on_ready():
     now = datetime.datetime.now(jst)
     almessage = "Event Information\n 現在調整中"
     almessage = '\n'
-    # if alerttime[0] > now or alerttime[1] > now or alerttime[2] > now:
-    #     if len(alltitles[0]) == 3 or len(alltitles[1]) == 3 or len(alltitles[2]) == 3:
-    #         while(1):
-    #             if (alerttime[a] > now) is True and len(alltitles[a]) == 3:
-    #                 alerttime[a] = alerttime[a] - \
-    #                     datetime.timedelta(minutes=30)
-    #                 almessage += '\n--------------------\n'
-    #                 almessage += '**' + legion[a] + '**'
-    #                 almessage += '\n'
-    #                 almessage += alerttitles[a]
-    #                 almessage += '\n'
-    #                 almessage += description[a]
-    #                 almessage += '\n'
-    #                 almessage += str(alerttime[a])
-    #             else:
-    #                 s += 1
-    #             if a == 4:
-    #                 break
-    #             a += 1
-    #     else:
-    #         almessage = "alert is none"
-    # else:
-    #     almessage = "alert is none"
-    # if s == 5:
-    #     almessage = "alert is none"
-    # if not almessage or almessage == "":
-    #     almessage = "alert is none"
+    for i, time in enumerate(event_time):
+        if time > now:
+            print(event_titles[i])
+            #                 almessage += alerttitles[a]
+            #                 almessage += '\n'
+            #                 almessage += description[a]
+            #                 almessage += '\n'
+            #                 almessage += str(alerttime[a])
 
-# ---------Event Information part END---------#
+            # ---------Event Information part END---------#
 
     colorlist = ["b", "red", "purple"]
     label = ["NC  " + text7, "TR  " + text8, "VS  " + text6]
