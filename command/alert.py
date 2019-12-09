@@ -101,5 +101,5 @@ async def on_ready():
                        description=almessage, color=discord.Color.orange())
     await client.get_guild(344369434103906314).get_channel(387540823551639552).purge(limit=2)
     await client.get_guild(344369434103906314).get_channel(387540823551639552).send(embed=em)
-    await client.get_guild(344369434103906314).get_channel(387540823551639552).send(file=discord.File('pop.png'))
+    # await client.get_guild(344369434103906314).get_channel(387540823551639552).send(file=discord.File('pop.png'))
 client.run(token)
