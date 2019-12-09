@@ -49,12 +49,12 @@ async def on_ready():
     for i, time in enumerate(event_time):
         time = time.astimezone(jst)
         if time > now and not("[END]" in event_titles[i]):
-            almessage += "{} - {} {}\n{}\n{}\n"\
+            almessage += "{} - {} {}\n{}\n{}\n---------------------\n"\
                 .format(event_titles[i][0], event_titles[i][1], event_titles[i][2], description[i], time)
     # ---------Event Information part END---------#
     html = urllib.request.urlopen(
         'https://ps2.fisu.pw/api/population/?world=40')
-    soup = BeautifulSoup(html, "html.parser")
+    soup = BeautifulSoup(html)
     soup_body = soup.find_all("body")
     print(soup_body)
     # label = ["NC  " + text7, "TR  " + text8, "VS  " + text6]
