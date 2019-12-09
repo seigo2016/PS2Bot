@@ -33,15 +33,16 @@ async def on_ready():
     html = urllib.request.urlopen('http://ps2.fisu.pw/control/?world=40')
     soup = BeautifulSoup(html, "html.parser")
     soup = soup.find_all("body")
-    print(soup)
+    soup2 = []
+    soup3 = []
     for i in soup:
-        soup3 = i.find_all(class_="wrapper")
+        soup2.append(i.find_all(class_="wrapper"))
+    for i in soup2:
+        soup3.append(i.find_all(class_="content"))
     for i in soup3:
-        soup4 = i.find_all(class_="content")
-    for i in soup4:
-        soup5 = i.find('script', type="text/javascript").text
-
-    text = soup5
+        soup.append(i.find('script', type="text/javascript").text)
+    print(soup3)
+    text = soup3
     text = text.replace('var _population = [', "")
     text = str(text).split("var _control = ")
     text1 = text[0].split("},{")

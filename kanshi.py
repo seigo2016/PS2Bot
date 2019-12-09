@@ -16,7 +16,7 @@ schedule.every(5).minutes.do(alert)
 
 
 def command1():
-    alert()
+    alert(p)
     while True:
         schedule.run_pending()
         time.sleep(1)
