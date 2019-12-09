@@ -9,6 +9,7 @@ import pytz
 import configparser
 import matplotlib.pyplot as plt
 import numpy as np
+import json
 import os
 
 client = discord.Client()
@@ -53,7 +54,7 @@ async def on_ready():
                 .format(event_titles[i][0], event_titles[i][1], event_titles[i][2], description[i], time)
     # ---------Event Information part END---------#
     api_url = 'https://ps2.fisu.pw/api/population/?world=40'
-    readObj = urllib.urlopen(api_url)
+    readObj = urllib.requests.urlopen(api_url)
     response = readObj.read()
     print(response)
     # label = ["NC  " + text7, "TR  " + text8, "VS  " + text6]
