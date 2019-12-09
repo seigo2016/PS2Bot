@@ -81,7 +81,7 @@ async def on_ready():
     almessage = "Event Information\n 現在調整中"
     almessage = '\n'
     for i, time in enumerate(event_time):
-        if time > now:
+        if time > now and "[END]" in event_titles[i]:
             print(event_titles[i])
             #                 almessage += alerttitles[a]
             #                 almessage += '\n'
