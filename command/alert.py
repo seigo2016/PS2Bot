@@ -28,40 +28,7 @@ def is_me(m):
 
 @client.event
 async def on_ready():
-    # text2 = [[0 for i in range(30)] for j in range(1500)]
-    # text3 = [[0 for i in range(2)] for j in range(2)]
-    # html = urllib.request.urlopen('http://ps2.fisu.pw/control/?world=40')
-    # soup = BeautifulSoup(html, "html.parser")
-    # soup_body = soup.find_all("body")
-    # soup2 = []
-    # soup3 = []
-    # for bd in soup_body:
-    #     soup_wrapper = bd.find_all(class_="wrapper")
-    #     for j in soup_wrapper:
-    #         soup3.append(j.find_all(class_="content"))
-    # for i in soup3:
-    #     soup.append(i.find('script', type="text/javascript").text)
-    # print(soup3)
-    # text = soup3
-    # text = text.replace('var _population = [', "")
-    # text = str(text).split("var _control = ")
-    # text1 = text[0].split("},{")
-    # for t in text1:
-    #     text2[i] = t.split(",")
-    # while(1):
-    #     if i == len(text2):
-    #         break
-    #     if str(text2[i][0]).split(":")[0] == '"timestamp"':
-    #         text3.append(text2[i])
-
-    # text0 = str(text3[len(text3) - 1]).replace('"',
-    #                                            "").replace('[', "").replace(']', "").split(",")
-    # text6 = str(text0[1]).split(":")[1].replace("'", "")
-    # text7 = str(text0[2]).split(":")[1].replace("'", "")
-    # text8 = str(text0[3]).split(":")[1].replace(
-    #     "'", "").replace("}", "").replace(";", "")
-    # text4 = int(text6) + int(text7) + int(text8)
-
+    # ---------Event Information part END---------#
     event_page = "http://ps2.fisu.pw/alert/rss"
     event_ret = requests.get(event_page)
     event_titles = []
@@ -82,11 +49,14 @@ async def on_ready():
     for i, time in enumerate(event_time):
         time = time.astimezone(jst)
         if time > now and not("[END]" in event_titles[i]):
-            almessage += "{}-{} {}\n{}\n{}\n"\
+            almessage += "{} - {} {}\n{}\n{}\n"\
                 .format(event_titles[i][0], event_titles[i][1], event_titles[i][2], description[i], time)
-            # ---------Event Information part END---------#
-
-    # colorlist = ["b", "red", "purple"]
+    # ---------Event Information part END---------#
+    html = urllib.request.urlopen(
+        'https://ps2.fisu.pw/api/population/?world=40')
+    soup = BeautifulSoup(html, "html.parser")
+    soup_body = soup.find_all("body")
+    print(soup_body)
     # label = ["NC  " + text7, "TR  " + text8, "VS  " + text6]
     # x = np.array([int(text7), int(text8), int(text6)])
     # fig = plt.figure(figsize=(3, 3))
