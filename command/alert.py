@@ -67,7 +67,6 @@ async def on_ready():
     event_titles = []
     description = []
     event_time = []
-    body = []
     alertsoup = BeautifulSoup(event_ret.content, "html.parser")
     for alertitem in alertsoup.find_all("item"):
         event_titles.append(alertitem.find("title").string.split())
@@ -81,27 +80,22 @@ async def on_ready():
     almessage = "Event Information\n 現在調整中"
     almessage = '\n'
     for i, time in enumerate(event_time):
-        if time > now and not "[END]" in event_titles[i]:
-            print(event_titles[i])
-            #                 almessage += alerttitles[a]
-            #                 almessage += '\n'
-            #                 almessage += description[a]
-            #                 almessage += '\n'
-            #                 almessage += str(alerttime[a])
-
+        if time > now and not("[END]" in event_titles[i]):
+            almessage += "{}\n{}\n{}\n"\
+                .format(event_titles[i], description[i], time)
             # ---------Event Information part END---------#
 
-    colorlist = ["b", "red", "purple"]
-    label = ["NC  " + text7, "TR  " + text8, "VS  " + text6]
-    x = np.array([int(text7), int(text8), int(text6)])
-    fig = plt.figure(figsize=(3, 3))
-    fig.patch.set_alpha(0.0)
-    plt.subplot(1, 1, 1)
-    plt.pie(x, labels=label, colors=colorlist)
-    plt.title('Soltech Pop \n(All:' + str(text4) + 'Last Updated' + str(now.hour) +
-              ':' + str(now.minute) + ':' + str(now.second) + ')', fontsize=10)
+    # colorlist = ["b", "red", "purple"]
+    # label = ["NC  " + text7, "TR  " + text8, "VS  " + text6]
+    # x = np.array([int(text7), int(text8), int(text6)])
+    # fig = plt.figure(figsize=(3, 3))
+    # fig.patch.set_alpha(0.0)
+    # plt.subplot(1, 1, 1)
+    # plt.pie(x, labels=label, colors=colorlist)
+    # plt.title('Soltech Pop \n(All:' + str(text4) + 'Last Updated' + str(now.hour) +
+    #           ':' + str(now.minute) + ':' + str(now.second) + ')', fontsize=10)
 
-    plt.savefig('pop.png')
+    # plt.savefig('pop.png')
     em = discord.Embed(title='Event Information',
                        description=almessage, color=discord.Color.orange())
     await client.get_guild(344369434103906314).get_channel(387540823551639552).purge(limit=2)
