@@ -49,14 +49,13 @@ async def on_ready():
     for i, time in enumerate(event_time):
         time = time.astimezone(jst)
         if time > now and not("[END]" in event_titles[i]):
-            almessage += "{} - {} {}\n{}\n{}\n---------------------\n"\
+            almessage += "{} - {} {}\n{}\n{}\n----------------------------------------\n"\
                 .format(event_titles[i][0], event_titles[i][1], event_titles[i][2], description[i], time)
     # ---------Event Information part END---------#
-    html = urllib.request.urlopen(
-        'https://ps2.fisu.pw/api/population/?world=40')
-    soup = BeautifulSoup(html)
-    soup_body = soup.find_all("body")
-    print(soup_body)
+    api_url = 'https://ps2.fisu.pw/api/population/?world=40'
+    readObj = urllib.urlopen(api_url)
+    response = readObj.read()
+    print(response)
     # label = ["NC  " + text7, "TR  " + text8, "VS  " + text6]
     # x = np.array([int(text7), int(text8), int(text6)])
     # fig = plt.figure(figsize=(3, 3))
@@ -67,8 +66,11 @@ async def on_ready():
     #           ':' + str(now.minute) + ':' + str(now.second) + ')', fontsize=10)
 
     # plt.savefig('pop.png')
-    em = discord.Embed(title='Event Information',
-                       description=almessage, color=discord.Color.orange())
+    em = discord.Embed(
+        title='Event Information',
+        description=almessage,
+        color=discord.Color.orange(),
+    )
     await client.get_guild(344369434103906314).get_channel(387540823551639552).purge(limit=2)
     await client.get_guild(344369434103906314).get_channel(387540823551639552).send(embed=em)
     # await client.get_guild(344369434103906314).get_channel(387540823551639552).send(file=discord.File('pop.png'))
