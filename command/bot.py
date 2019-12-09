@@ -13,7 +13,6 @@ if not len(token):
     token = config.get("token", 'token')
 
 
-
 @client.event
 async def on_message(message):
     if message.content.startswith('!Help'):
@@ -64,8 +63,8 @@ async def on_message(message):
         dtime = datetime.datetime.now()
         pdtime = dtime + datetime.timedelta(hours=- 16)
         pstime = dtime + datetime.timedelta(hours=- 17)
-        body = (":flag_jp:(JP)JDT   {}\n :flag_us:(US)PDT  {}\n" +
-                ":flag_us:(US)PST {}").format(dtime.strftime('%X'), pdtime.strftime('%X'), pstime.strftime('%X'))
+        body = (":flag_jp:(JP)JDT   {}\n :flag_us:(US)PDT  {}\n" + ":flag_us:(US)PST {}").format(
+            dtime.strftime('%X'), pdtime.strftime('%X'), pstime.strftime('%X'))
         await message.channel.send(body)
 
 client.run(token)

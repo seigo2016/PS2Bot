@@ -12,7 +12,7 @@ if not len(token):
     token = config.get("token", 'token')
 
 
-typename = ""
+# platoon-lobby-VC "651979369702621196"
 
 
 def is_me(m):
@@ -45,7 +45,6 @@ async def on_message(message):
             await client.get_guild(344369434103906314).get_channel(383144743783104513).send(body)
 
     if message.content.startswith('!B'):
-
         await message.channel.send("解散しました")
         await client.get_guild(344369434103906314).get_channel(383144743783104513).purge(limit=1, check=is_me)
         allchat[str(message.channel)][0] = "未編成"

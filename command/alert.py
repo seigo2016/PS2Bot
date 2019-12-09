@@ -32,20 +32,14 @@ async def on_ready():
     text3 = [[0 for i in range(2)] for j in range(2)]
     html = urllib.request.urlopen('http://ps2.fisu.pw/control/?world=40')
     soup = BeautifulSoup(html, "html.parser")
-    soup2 = soup.find_all("body")
-    a = 0
-    for i in soup2:
+    soup = soup.find_all("body")
+    print(soup)
+    for i in soup:
         soup3 = i.find_all(class_="wrapper")
-        a += 1
-    a = 0
-    for j in soup3:
-        soup4 = j.find_all(class_="content")
-        a += 1
-    a = 0
-    for j in soup4:
-        soup5 = j.find('script', type="text/javascript").text
-        a += 1
-    i = 0
+    for i in soup3:
+        soup4 = i.find_all(class_="content")
+    for i in soup4:
+        soup5 = i.find('script', type="text/javascript").text
 
     text = soup5
     text = text.replace('var _population = [', "")
@@ -53,14 +47,11 @@ async def on_ready():
     text1 = text[0].split("},{")
     for t in text1:
         text2[i] = t.split(",")
-        i += 1
-    i = 0
     while(1):
         if i == len(text2):
             break
         if str(text2[i][0]).split(":")[0] == '"timestamp"':
             text3.append(text2[i])
-        i += 1
 
     text0 = str(text3[len(text3) - 1]).replace('"',
                                                "").replace('[', "").replace(']', "").split(",")
@@ -70,64 +61,55 @@ async def on_ready():
         "'", "").replace("}", "").replace(";", "")
     text4 = int(text6) + int(text7) + int(text8)
 
-    alerturl = "http://ps2.fisu.pw/alert/rss"
-    alertret = ""
-    alertret = requests.get(alerturl)
-    alerttitles = ["" for i in range(100)]
-    legion = ["" for i in range(100)]
-    description = ["" for i in range(100)]
-    pubdate = ["" for i in range(100)]
-    alerttime = ["" for i in range(100)]
-    now = datetime.datetime.now()
-    alertsoup = BeautifulSoup(alertret.content, "html.parser")
-    i = 0
+    event_page = "http://ps2.fisu.pw/alert/rss"
+    event_ret = requests.get(event_page)
+    event_titles = []
+    legion = []
+    description = []
+    event_time = []
+    alertsoup = BeautifulSoup(event_ret.content, "html.parser")
     for alertitem in alertsoup.find_all("item"):
-        alerttitles[i] = (alertitem.find("title").string)
-        legion[i] = (alertitem.find("fisupw:starter_faction").string)
-        description[i] = (alertitem.find("description").string)
-        pubdate[i] = (alertitem.find("pubdate").string)
-        i += 1
-    m = 0
+        event_titles.append(alertitem.find("title").string.split())
+        legion.append(alertitem.find("fisupw:starter_faction").string)
+        description.append(alertitem.find("description").string)
+        time_tmp = alertitem.find("pubdate").string
+        time_tmp = dateutil.parser.parse(time_tmp) + \
+            datetime.timedelta(minutes=30)
+        event_time.append(time_tmp)
     jst = pytz.timezone('Asia/Tokyo')
-    now = jst.localize(now)
-    while(m != 5):
-        alerttime[m] = dateutil.parser.parse(pubdate[m])
-        alerttime[m] = alerttime[m].astimezone(pytz.timezone('Asia/Tokyo'))
-        alerttime[m] = alerttime[m] + datetime.timedelta(minutes=45)
-        alltitles[m] = alerttitles[m].split()
-        m += 1
-    a = 0
-    s = 0
     now = datetime.datetime.now(jst)
-    almessage = "Event Information\n"
+    now = jst.localize(now)
+    almessage = "Event Information\n 現在調整中"
     almessage = '\n'
-    if alerttime[0] > now or alerttime[1] > now or alerttime[2] > now:
-        if len(alltitles[0]) == 3 or len(alltitles[1]) == 3 or len(alltitles[2]) == 3:
-            while(1):
-                if (alerttime[a] > now) is True and len(alltitles[a]) == 3:
-                    alerttime[a] = alerttime[a] - \
-                        datetime.timedelta(minutes=30)
-                    almessage += '\n--------------------\n'
-                    almessage += '**' + legion[a] + '**'
-                    almessage += '\n'
-                    almessage += alerttitles[a]
-                    almessage += '\n'
-                    almessage += description[a]
-                    almessage += '\n'
-                    almessage += str(alerttime[a])
-                else:
-                    s += 1
-                if a == 4:
-                    break
-                a += 1
-        else:
-            almessage = "alert is none"
-    else:
-        almessage = "alert is none"
-    if s == 5:
-        almessage = "alert is none"
-    if not almessage or almessage == "":
-        almessage = "alert is none"
+    # if alerttime[0] > now or alerttime[1] > now or alerttime[2] > now:
+    #     if len(alltitles[0]) == 3 or len(alltitles[1]) == 3 or len(alltitles[2]) == 3:
+    #         while(1):
+    #             if (alerttime[a] > now) is True and len(alltitles[a]) == 3:
+    #                 alerttime[a] = alerttime[a] - \
+    #                     datetime.timedelta(minutes=30)
+    #                 almessage += '\n--------------------\n'
+    #                 almessage += '**' + legion[a] + '**'
+    #                 almessage += '\n'
+    #                 almessage += alerttitles[a]
+    #                 almessage += '\n'
+    #                 almessage += description[a]
+    #                 almessage += '\n'
+    #                 almessage += str(alerttime[a])
+    #             else:
+    #                 s += 1
+    #             if a == 4:
+    #                 break
+    #             a += 1
+    #     else:
+    #         almessage = "alert is none"
+    # else:
+    #     almessage = "alert is none"
+    # if s == 5:
+    #     almessage = "alert is none"
+    # if not almessage or almessage == "":
+    #     almessage = "alert is none"
+
+# ---------Event Information part END---------#
 
     colorlist = ["b", "red", "purple"]
     label = ["NC  " + text7, "TR  " + text8, "VS  " + text6]
@@ -140,7 +122,7 @@ async def on_ready():
               ':' + str(now.minute) + ':' + str(now.second) + ')', fontsize=10)
 
     plt.savefig('pop.png')
-    em = discord.Embed(title='Alert Information',
+    em = discord.Embed(title='Event Information',
                        description=almessage, color=discord.Color.orange())
     await client.get_guild(344369434103906314).get_channel(387540823551639552).purge(limit=2)
     await client.get_guild(344369434103906314).get_channel(387540823551639552).send(embed=em)
