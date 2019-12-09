@@ -12,10 +12,11 @@ def alert():
     proc.terminate()
 
 
-schedule.every(10).minutes.do(alert)
+schedule.every(5).minutes.do(alert)
 
 
 def command1():
+    alert()
     while True:
         schedule.run_pending()
         time.sleep(1)
