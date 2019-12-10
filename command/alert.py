@@ -14,17 +14,11 @@ import os
 
 client = discord.Client()
 
-alltitles = {1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "s", 8: "", 9: ""}
-
 token = os.environ['token']
 if not len(token):
     config = configparser.ConfigParser()
     config.read('setting.ini')
     token = config.get("token", 'token')
-
-
-def is_me(m):
-    return m.author == client.user
 
 
 @client.event
@@ -45,7 +39,7 @@ async def on_ready():
         event_time.append(time_tmp)
     jst = pytz.timezone('Asia/Tokyo')
     now = datetime.datetime.now(jst)
-    event_body = "Event Information\n"
+    event_body = ""
     for i, time in enumerate(event_time):
         time = time.astimezone(jst)
         if time > now and not("[END]" in event_titles[i]):
@@ -57,7 +51,6 @@ async def on_ready():
     readObj = urllib.request.urlopen(api_url)
     response = readObj.read()
     response_json = json.loads(response)["result"][0]
-    print(response_json)
     nc_pop = response_json["nc"]
     tr_pop = response_json["tr"]
     vs_pop = response_json["vs"]

@@ -27,9 +27,9 @@ async def on_message(message):
     for key, val in add_role.items():
         rolelist[key] = discord.utils.get(
             client.get_guild(344369434103906314).roles, name=val)
-    if str(message.channel).find('irassyai-channel') != -1:
+    if 'irassyai-channel' in str(message.channel):
         is_rolech = True
-    elif str(message.channel).find('test') != -1:
+    elif 'test' in str(message.channel):
         is_rolech = True
     if not message.author.bot and is_rolech:
         text = message.content.upper()
