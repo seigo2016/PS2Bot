@@ -36,7 +36,9 @@ async def on_voice_state_update(member, before, after):
         print(member)
         newch = await server.create_voice_channel(
             "Platoon_1-Test", category=after.channel.category)
-        await member.move_to(newch)
+        print(client.Permissions())
+        print("testtest")
+        await member.move_member(newch)
         # await client.get_guild(344369434103906314).get_channel(383144743783104513).send(body)
 
 
