@@ -33,33 +33,33 @@ platoon_text_list = {}
 platoon_power_message = {}
 
 
-@client.event
-async def on_voice_state_update(member, before, after):
-    server = client.get_guild(344369434103906314)
-    if "platoon-lobby" in str(after.channel):
-        print(member)
-        vc_ch = await server.create_voice_channel("Platoon_1-Test", category=after.channel.category)
-        text_ch = await server.create_text_channel("Platoon_1-Test", category=after.channel.category)
-        platoon_vc_list.update({"Platoon_1-Test": vc_ch})
-        platoon_text_list.update({"Platoon_1-Test": text_ch})
-        body = f"{member.mention}\n 小隊が編成されました。\n勢力を選択してください\n"
-        await member.move_to(vc_ch)
-        text_id = await text_ch.send(body)
-        platoon_power_message.update({"Platoon_1-Test": text_id})
-        await platoon_power_message["Platoon_1-Test"].add_reaction("NC")
-        await platoon_power_message["Platoon_1-Test"].add_reaction("TR")
-        await platoon_power_message["Platoon_1-Test"].add_reaction("VS")
-        await platoon_power_message["Platoon_1-Test"].add_reaction("NS")
-    elif str(after.channel) == "None" and len(before.channel.members) == 0:
-        vc_id = platoon_vc_list.pop(str(before.channel))
-        text_id = platoon_text_list.pop(str(before.channel))
-        await vc_id.delete()
-        await text_id.delete()
+# @client.event
+# async def on_voice_state_update(member, before, after):
+#     server = client.get_guild(344369434103906314)
+#     if "platoon-lobby" in str(after.channel):
+#         print(member)
+#         vc_ch = await server.create_voice_channel("Platoon_1-Test", category=after.channel.category)
+#         text_ch = await server.create_text_channel("Platoon_1-Test", category=after.channel.category)
+#         platoon_vc_list.update({"Platoon_1-Test": vc_ch})
+#         platoon_text_list.update({"Platoon_1-Test": text_ch})
+#         body = f"{member.mention}\n 小隊が編成されました。\n勢力を選択してください\n"
+#         await member.move_to(vc_ch)
+#         text_id = await text_ch.send(body)
+#         platoon_power_message.update({"Platoon_1-Test": text_id})
+#         await platoon_power_message["Platoon_1-Test"].add_reaction("NC")
+#         await platoon_power_message["Platoon_1-Test"].add_reaction("TR")
+#         await platoon_power_message["Platoon_1-Test"].add_reaction("VS")
+#         await platoon_power_message["Platoon_1-Test"].add_reaction("NS")
+#     elif str(after.channel) == "None" and len(before.channel.members) == 0:
+#         vc_id = platoon_vc_list.pop(str(before.channel))
+#         text_id = platoon_text_list.pop(str(before.channel))
+#         await vc_id.delete()
+#         await text_id.delete()
 
 
-@client.event
-async def add_reaction(emoji):
-    print(str(emoji.name))
+# @client.event
+# async def add_reaction(emoji):
+#     print(str(emoji.name))
 
 
 @client.event
