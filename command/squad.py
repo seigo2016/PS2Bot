@@ -31,8 +31,12 @@ chat = {"platoon_textchat_1": "",
 
 @client.event
 async def on_voice_state_update(member, before, after):
-    if "platoon_lobby" in str(after.channel):
+    if "platoon-lobby" in str(after.channel):
         print(member)
+        newch = await client.get_guild(344369434103906314).create_voice_channel(
+            "Platoon_1-Test", category="360673207356751873")
+        await member.move_to(newch)
+        # await client.get_guild(344369434103906314).get_channel(383144743783104513).send(body)
 
 
 @client.event
