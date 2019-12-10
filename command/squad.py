@@ -31,7 +31,7 @@ chat = {"platoon_textchat_1": "",
 
 @client.event
 async def on_voice_state_update(member, before, after):
-    if "platoon_lobby" in after.channel.name:
+    if "platoon_lobby" in str(after.channel):
         print(member)
 
 
