@@ -4,12 +4,12 @@ import configparser
 import os
 
 client = discord.Client()
-
-token = os.environ['token']
-if not len(token):
-    config = configparser.ConfigParser()
-    config.read('setting.ini')
-    token = config.get("token", 'token')
+token = ""
+# token = os.environ['token']
+# if not len(token):
+config = configparser.ConfigParser()
+config.read('token.ini')
+token = config.get("token", 'token')
 
 
 # platoon-lobby-VC "651979369702621196"
@@ -28,18 +28,24 @@ chat = {"platoon_textchat_1": "",
         "platoon_textchat_3": "",
         "command_test": ""}
 
+platoon_list = {}
 
-@client.event
-async def on_voice_state_update(member, before, after):
-    if "platoon-lobby" in str(after.channel):
-        server = client.get_guild(344369434103906314)
-        print(member)
-        newch = await server.create_voice_channel(
-            "Platoon_1-Test", category=after.channel.category)
-        print(client.Permissions())
-        print("testtest")
-        await member.move_member(newch)
-        # await client.get_guild(344369434103906314).get_channel(383144743783104513).send(body)
+
+# @client.event
+# async def on_voice_state_update(member, before, after):
+#     server = client.get_guild(344369434103906314)
+#     print(str(after.channel))
+#     if "platoon-lobby" in str(after.channel):
+#         print(member)
+#         ch = await server.create_voice_channel("Platoon_1-Test", category=after.channel.category)
+#         platoon_list.update({"Platoon_1-Test": ch})
+#         # print(client.Permissions())
+#         # print("testtest")
+#         await member.move_to(ch)
+#         # await client.get_guild(344369434103906314).get_channel(383144743783104513).send(body)
+#     elif str(after.channel) == "None":
+#         chid = platoon_list.pop(str(before.channel))
+#         await server.delete_voice_channel(chid)
 
 
 @client.event
