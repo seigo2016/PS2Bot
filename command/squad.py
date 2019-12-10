@@ -5,11 +5,11 @@ import os
 
 client = discord.Client()
 token = ""
-# token = os.environ['token']
-# if not len(token):
-config = configparser.ConfigParser()
-config.read('token.ini')
-token = config.get("token", 'token')
+token = os.environ['token']
+# # if not len(token):
+# config = configparser.ConfigParser()
+# config.read('token.ini')
+# token = config.get("token", 'token')
 
 
 # platoon-lobby-VC "651979369702621196"
