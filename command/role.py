@@ -4,12 +4,12 @@ import configparser
 import os
 
 client = discord.Client()
-
-token = os.environ['token']
-if not len(token):
-    config = configparser.ConfigParser()
-    config.read('setting.ini')
-    token = config.get("token", 'token')
+current_dir = os.path.dirname(os.path.abspath(__file__))
+#token = os.environ['token']
+#if not len(token):
+config = configparser.ConfigParser()
+config.read(current_dir+'/token.ini')
+token = config.get("token", 'token')
 
 
 @client.event

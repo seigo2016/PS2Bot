@@ -5,18 +5,18 @@ import configparser
 import os
 
 client = discord.Client()
-
-token = os.environ['token']
-if not len(token):
-    config = configparser.ConfigParser()
-    config.read('setting.ini')
-    token = config.get("token", 'token')
+current_dir = os.path.dirname(os.path.abspath(__file__))
+#token = os.environ['token']
+#if not len(token):
+config = configparser.ConfigParser()
+config.read(current_dir+'/token.ini')
+token = config.get("token", 'token')
 
 
 @client.event
 async def on_message(message):
     if message.content.startswith('!Help'):
-        with open("help.txt", "r") as f:
+        with open(current_dir+"/../help.txt", "r") as f:
             data = f.read()
         co = discord.Color.blue()
         em = discord.Embed(title='Help', description="\n\n" + data, colour=co)

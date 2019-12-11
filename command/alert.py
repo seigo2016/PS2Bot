@@ -1,3 +1,4 @@
+
 # coding:utf-8
 import discord
 import datetime
@@ -13,12 +14,14 @@ import json
 import os
 
 client = discord.Client()
-
-token = os.environ['token']
-if not len(token):
-    config = configparser.ConfigParser()
-    config.read('setting.ini')
-    token = config.get("token", 'token')
+current_dir = os.path.dirname(os.path.abspath(__file__))
+#token = os.environ['token']
+#print(current_dir = os.path.dirname(os.path.abspath(__file__)))
+#print(current_dir)
+#if not len(token):
+config = configparser.ConfigParser()
+config.read(current_dir+'/token.ini')
+token = config.get("token", 'token')
 
 
 @client.event
@@ -69,7 +72,7 @@ async def on_ready():
     plt.title(
         'Soltech Pop \nAll:{} {}'.format(all_pop, updatetime), fontsize=10)
 
-    plt.savefig('pop.png')
+    plt.savefig(current_dir+'pop.png')
     # ---------Get Population Part END---------#
     # ---------Send Message Part START---------#
     em = discord.Embed(
@@ -79,6 +82,6 @@ async def on_ready():
     )
     await client.get_guild(344369434103906314).get_channel(387540823551639552).purge(limit=2)
     await client.get_guild(344369434103906314).get_channel(387540823551639552).send(embed=em)
-    await client.get_guild(344369434103906314).get_channel(387540823551639552).send(file=discord.File('pop.png'))
+    await client.get_guild(344369434103906314).get_channel(387540823551639552).send(file=discord.File(current_dir+'pop.png'))
     # ---------Send Message Part END---------#
 client.run(token)

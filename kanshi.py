@@ -1,4 +1,5 @@
 # coding:utf-8
+#!/usr/bin/python3
 from subprocess import Popen
 import threading
 import schedule
@@ -6,7 +7,7 @@ import time
 
 
 def alert():
-    cmd = "python ./command/alert.py"
+    cmd = "python3 /home/seigo/PS2Bot/command/alert.py"
     proc = Popen(cmd.strip().split(" "))
     time.sleep(30)
     proc.terminate()
@@ -23,19 +24,19 @@ def command1():
 
 
 def command3():
-    cmd = "python ./command/bot.py"
+    cmd = "python3 /home/seigo/PS2Bot/command/bot.py"
     proc = Popen(cmd.strip().split(" "))
     proc.wait()
 
 
 def command5():
-    cmd = "python ./command/role.py"
+    cmd = "python3 /home/seigo/PS2Bot/command/role.py"
     proc = Popen(cmd.strip().split(" "))
     proc.wait()
 
 
 def command7():
-    cmd = "python ./command/squad.py"
+    cmd = "python3 /home/seigo/PS2Bot/command/squad.py"
     proc = Popen(cmd.strip().split(" "))
     proc.wait()
 
