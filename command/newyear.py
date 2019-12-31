@@ -6,7 +6,7 @@ import os
 from discord.ext import tasks
 
 client = discord.Client()
-
+print("test")
 token = os.environ['token']
 if not len(token):
     config = configparser.ConfigParser()
