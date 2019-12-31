@@ -7,12 +7,6 @@ import time
 print("start")
 
 
-def newyear():
-    cmd = "python ./command/newyear.py"
-    proc = Popen(cmd.strip().split(" "))
-    time.sleep(100000)
-    proc.terminate()
-
 
 def alert():
     cmd = "python ./command/alert.py"
@@ -53,9 +47,7 @@ th1 = threading.Thread(target=command1)
 th3 = threading.Thread(target=command3)
 th5 = threading.Thread(target=command5)
 th7 = threading.Thread(target=command7)
-th2 = threading.Thread(target=newyear)
 th1.start()
 th3.start()
 th5.start()
 th7.start()
-th2.start()
