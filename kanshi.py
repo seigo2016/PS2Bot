@@ -4,17 +4,12 @@ import threading
 import schedule
 import time
 
-s = sched.scheduler(time.time, time.sleep)
-sh = datetime.datetime(2020, 1, 1, 0, 0)
-sh = int(time.mktime(et2.timetuple()))
 
 def newyear():
-    cmd = "python ./command/newyear.py"¬
-    proc = Popen(cmd.strip().split(" "))¬
-    time.sleep(30)¬
+    cmd = "python ./command/newyear.py"
+    proc = Popen(cmd.strip().split(" "))
     proc.wait()
 
-s.enterabs(et1, 1, newyear)
 
 def alert():
     cmd = "python ./command/alert.py"
@@ -55,7 +50,9 @@ th1 = threading.Thread(target=command1)
 th3 = threading.Thread(target=command3)
 th5 = threading.Thread(target=command5)
 th7 = threading.Thread(target=command7)
+th2 = threading.Thread(target=newyear)
 th1.start()
 th3.start()
 th5.start()
 th7.start()
+th2.start()
