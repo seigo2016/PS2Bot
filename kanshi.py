@@ -4,6 +4,8 @@ import threading
 import schedule
 import time
 
+print("start")
+
 
 def newyear():
     cmd = "python ./command/newyear.py"
