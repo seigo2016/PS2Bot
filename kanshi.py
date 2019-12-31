@@ -8,7 +8,8 @@ import time
 def newyear():
     cmd = "python ./command/newyear.py"
     proc = Popen(cmd.strip().split(" "))
-    proc.wait()
+    time.sleep(100000)
+    proc.terminate()
 
 
 def alert():
