@@ -22,5 +22,5 @@ async def newyear():
         body = "あけましておめでとうございます。\n 今年もPlanetSide2JPコミュニティを宜しくお願いします"
         await client.get_guild(344369434103906314).get_channel(385401705975513093).send(body)
 
-newyear()
+newyear.start()
 client.run(token)
