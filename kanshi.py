@@ -10,7 +10,7 @@ print("start")
 
 
 def alert():
-    cmd = "python3 /home/seigo/PS2Bot/command/alert.py"
+    cmd = "python3 command/alert.py"
     proc = Popen(cmd.strip().split(" "))
     time.sleep(30)
     proc.terminate()
@@ -27,19 +27,19 @@ def command1():
 
 
 def command3():
-    cmd = "python3 /home/seigo/PS2Bot/command/bot.py"
+    cmd = "python3 command/bot.py"
     proc = Popen(cmd.strip().split(" "))
     proc.wait()
 
 
 def command5():
-    cmd = "python3 /home/seigo/PS2Bot/command/role.py"
+    cmd = "python3 command/role.py"
     proc = Popen(cmd.strip().split(" "))
     proc.wait()
 
 
 def command7():
-    cmd = "python3 /home/seigo/PS2Bot/command/squad.py"
+    cmd = "python3 command/squad.py"
     proc = Popen(cmd.strip().split(" "))
     proc.wait()
 
