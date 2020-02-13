@@ -15,13 +15,11 @@ import os
 
 client = discord.Client()
 current_dir = os.path.dirname(os.path.abspath(__file__))
-#token = os.environ['token']
-#print(current_dir = os.path.dirname(os.path.abspath(__file__)))
-#print(current_dir)
-#if not len(token):
-config = configparser.ConfigParser()
-config.read(current_dir+'/token.ini')
-token = config.get("token", 'token')
+token = os.environ['token']
+if not len(token):
+    config = configparser.ConfigParser()
+    config.read(current_dir+'/token.ini')
+    token = config.get("token", 'token')
 
 
 @client.event
