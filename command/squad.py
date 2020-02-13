@@ -18,7 +18,6 @@ if not len(token):
 def is_me(m):
     return m.user == client.user
 
-
 squad_list = {}
 emoji = []
 

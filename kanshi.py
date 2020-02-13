@@ -5,6 +5,9 @@ import threading
 import schedule
 import time
 
+print("start")
+
+
 
 def alert():
     cmd = "python3 /home/seigo/PS2Bot/command/alert.py"
