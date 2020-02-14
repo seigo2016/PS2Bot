@@ -6,10 +6,10 @@ import random
 current_dir = os.path.dirname(os.path.abspath(__file__))
 client = discord.Client()
 token = os.environ['token']
-if not len(token):
-    config = configparser.ConfigParser()
-    config.read(current_dir+'/token.ini')
-    token = config.get("token", 'token')
+# if not len(token):
+#     config = configparser.ConfigParser()
+#     config.read(current_dir+'/token.ini')
+#     token = config.get("token", 'token')
 
 
 # platoon-lobby-VC "651979369702621196"
