@@ -4,10 +4,10 @@ from subprocess import Popen
 import threading
 import schedule
 import time
-
+import os
 print("start")
 
-
+current_dir = os.path.dirname(os.path.abspath(__file__))
 
 def alert():
     cmd = "python3 command/alert.py"
