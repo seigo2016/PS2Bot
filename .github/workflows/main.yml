@@ -15,7 +15,7 @@ jobs:
         HOST_PORT: ${{ secrets.HOST_PORT }}
         HOST_USER: ${{ secrets.HOST_USER }}
         HOST_NAME: ${{ secrets.HOST_NAME }}
-        TOKEN: ${{ secrets.token }} 
+        TOKEN: ${{ secrets.token }}
       run: |
         echo ${SSH_KEY} > id_rsa && chmod 600 id_rsa
         sed -i -e "s#\\\\n#\n#g" id_rsa
