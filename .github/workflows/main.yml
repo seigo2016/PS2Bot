@@ -10,14 +10,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: ssh
-      env : 
+      env :
         SSH_KEY: ${{ secrets.SSH_KEY }}
         HOST_PORT: ${{ secrets.HOST_PORT }}
         HOST_USER: ${{ secrets.HOST_USER }}
-        HOST_NAME: ${{ secrets.HOST_NAME }} 
-            
+        HOST_NAME: ${{ secrets.HOST_NAME }}
+
       run: |
         echo ${SSH_KEY} > id_rsa && chmod 600 id_rsa
         sed -i -e "s#\\\\n#\n#g" id_rsa
-        ssh -i id_rsa  -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p ${HOST_PORT} ${HOST_USER}@${HOST_NAME} 'cd /home/seigo/PS2Bot/ && git pull origin master && docker build -t ps2bot:1.2 . && docker run -d -it --name ps2bot ps2bot:1.2'
+        ssh -i id_rsa  -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p ${HOST_PORT} ${HOST_USER}@${HOST_NAME} 'cd /home/seigo/PS2Bot/ && git pull origin master && docker build -t ps2bot:1.2 . && docker stop t2t && docker rm t2t && docker run -d -it --name ps2bot ps2bot:1.2'
 
