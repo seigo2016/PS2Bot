@@ -11,14 +11,14 @@ jobs:
     - uses: actions/checkout@v2
     - name: ssh
       env : 
-        SSH_KEY: ${{ SSH_KEY }}
-        HOST_PORT: ${{ HOST_PORT }}
-        HOST_USER: ${{ HOST_USER }}
-        HOST_NAME: ${{ HOST_NAME }} 
+        SSH_KEY: ${{ secrets.SSH_KEY }}
+        HOST_PORT: ${{ secrets.HOST_PORT }}
+        HOST_USER: ${{ secrets.HOST_USER }}
+        HOST_NAME: ${{ secrets.HOST_NAME }} 
             
       run: |
         touch ~/.ssh/id_rsa
-        echo ${{SSH_KEY}} > ~/.ssh/id_rsa
+        echo ${SSH_KEY} > ~/.ssh/id_rsa
         sed -i -e "s#\\\\n#\n#g" ~/.ssh/id_rsa
         ssh -i ~/.ssh/id_rsa  -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p ${HOST_PORT} ${HOST_USER}@${HOST_NAME} 'cd /home/seigo/ps2bot/PS2Bot/ | touch test '
 
