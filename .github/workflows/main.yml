@@ -21,7 +21,7 @@ jobs:
       #   sed -i -e "s#\\\\n#\n#g" id_rsa
       #   ssh -i id_rsa  -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p ${HOST_PORT} ${HOST_USER}@${HOST_NAME} 'export BOT_TOKEN=${TOKEN} && cd /home/seigo/PS2Bot/ && git pull origin master && docker build -t ps2bot:1.3 . --force-rm=true --no-cache && docker stop ps2bot && docker rm ps2bot && docker run -d -it --env BOT_TOKEN --name ps2bot ps2bot:1.3'
       - uses: appleboy/ssh-action@master
-      - name: ssh
+      name: ssh
       with:
         host: ${{ secrets.HOST_NAME }}
         username: ${{ secrets.HOST_USER }}
