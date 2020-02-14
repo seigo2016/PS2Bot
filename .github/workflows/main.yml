@@ -19,5 +19,5 @@ jobs:
       run: |
         echo ${SSH_KEY} > id_rsa && chmod 600 id_rsa
         sed -i -e "s#\\\\n#\n#g" id_rsa
-        ssh -i id_rsa  -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p ${HOST_PORT} ${HOST_USER}@${HOST_NAME} 'cd /home/seigo/ps2bot/PS2Bot/ | touch test '
+        ssh -i id_rsa  -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p ${HOST_PORT} ${HOST_USER}@${HOST_NAME} 'cd /home/seigo/PS2Bot/ && git pull origin master && docker --build -t ps2bot:1.2 . && docker run -d -it -n ps2bot ps2bot:1.2'
 
