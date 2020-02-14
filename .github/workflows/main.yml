@@ -10,4 +10,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: ssh
-      run: ssh -i ./key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p ${HOST_PORT} ${HOST_USER}@${HOST_NAME} 'cd /home/seigo/ps2bot/PS2Bot/ | touch test '
+      run: |
+	echo ${SSH_KEY} > ~/.ssh/id_rsa
+	sed -i -e "s#\\\\n#\n#g" ~/.ssh/id_rsa
+	ssh -i ~/.ssh/id_rsa  -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p ${HOST_PORT} ${HOST_USER}@${HOST_NAME} 'cd /home/seigo/ps2bot/PS2Bot/ | touch test '
+
+
