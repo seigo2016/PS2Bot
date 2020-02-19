@@ -5,7 +5,7 @@ import threading
 import schedule
 import time
 import os
-print("start")
+print("AppStart")
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
