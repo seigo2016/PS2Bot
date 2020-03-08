@@ -10,10 +10,7 @@ token = os.environ['token']
 #     config = configparser.ConfigParser()
 #     config.read(current_dir+'/token.ini')
 #     token = config.get("token", 'token')
-
-
 # platoon-lobby-VC "651979369702621196"
-
 
 def is_me(m):
     return m.user == client.user
@@ -63,39 +60,11 @@ async def on_raw_reaction_add(payload):
             break
     user = server.get_member(payload.user_id)
     if payload.user_id != client.user.id and user == squad_list[vc_id]["user"]:
-        channel_name = client.get_channel(payload.channel_id)
         power_name = payload.emoji.name.lower()
         name = "{}_squad{}".format(power_name,power_color[payload.emoji.name])
         vc_ch = client.get_channel(vc_id)
         text_ch  = client.get_channel(payload.channel_id)
         await text_ch.edit(name=name)
         await vc_ch.edit(name=name)
-
-@client.event
-async def on_message(message):
-    if message.content.startswith('!PTR') or message.content.startswith('!PVS') or message.content.startswith('!PNC'):
-        cmd = message.content.split()
-        cmd[0] = cmd[0].lstrip('!P')
-        if len(cmd) != 2:
-            cmd.append("------")
-        if len(cmd[1]) > 30:
-            await message.channel.send("Message is too long")
-        else:
-            await message.channel.send("作成しました")
-            lobby_message[str(message.channel)][0] = (cmd[0])
-            lobby_message[str(message.channel)][1] = (cmd[1])
-
-            await client.get_guild(344369434103906314).get_channel(383144743783104513).purge(limit=1, check=is_me)
-            body = ('<#344401171919798273>    【勢力】   "{}"    コメント    {} \n<#344401275410186253>      【勢力】  "{}"     コメント    {}\n<#344401302169714688>     【勢力】   "{}"    コメント    {}\n').format(
-                lobby_message["platoon_textchat_1"][0], lobby_message["platoon_textchat_1"][1], lobby_message["platoon_textchat_2"][0], lobby_message["platoon_textchat_2"][1], lobby_message["platoon_textchat_3"][0], lobby_message["platoon_textchat_3"][1])
-            await client.get_guild(344369434103906314).get_channel(383144743783104513).send(body)
-
-    if message.content.startswith('!B'):
-        await message.channel.send("解散しました")
-        await client.get_guild(344369434103906314).get_channel(383144743783104513).purge(limit=1, check=is_me)
-        lobby_message[str(message.channel)][0] = "未編成"
-        lobby_message[str(message.channel)][1] = "------"
-        body = ('<#344401171919798273>    【勢力】   "{}"    コメント    {} \n<#344401275410186253>      【勢力】  "{}"     コメント    {}\n<#344401302169714688>     【勢力】   "{}"    コメント    {}\n').format(
-            lobby_message["platoon_textchat_1"][0], lobby_message["platoon_textchat_1"][1], lobby_message["platoon_textchat_2"][0], lobby_message["platoon_textchat_2"][1], lobby_message["platoon_textchat_3"][0], lobby_message["platoon_textchat_3"][1])
-        await client.get_guild(344369434103906314).get_channel(383144743783104513).send(body)
+        
 client.run(token)
