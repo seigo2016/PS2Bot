@@ -106,3 +106,4 @@ venv.bak/
 *.ini
 
 ps2bot/
+.DS_Store
