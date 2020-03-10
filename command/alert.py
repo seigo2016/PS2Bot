@@ -68,7 +68,7 @@ async def on_ready():
     plt.subplot(1, 1, 1)
     plt.pie(x, labels=label, colors=colorlist)
     plt.title(
-        'Soltech Pop \nAll:{} {}'.format(all_pop, updatetime), fontsize=10)
+        'Soltech Pop \nAll:{} {}'.format(all_pop, updatetime.strftime('%X')), fontsize=10)
 
     plt.savefig(current_dir+'pop.png')
     # ---------Get Population Part END---------#

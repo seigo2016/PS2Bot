@@ -5,6 +5,7 @@ import threading
 import schedule
 import time
 import os
+
 print("AppStart")
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -14,17 +15,13 @@ def alert():
     proc = Popen(cmd.strip().split(" "))
     time.sleep(30)
     proc.terminate()
-
-
 schedule.every(5).minutes.do(alert)
-
 
 def command1():
     alert()
     while True:
         schedule.run_pending()
         time.sleep(1)
-
 
 def command3():
     cmd = "python3 command/bot.py"
