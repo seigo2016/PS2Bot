@@ -73,7 +73,7 @@ async def on_message(message):
     rmrolelist = []
     is_rolech = False
     for key, val in add_role.items():
-        rolelist[key] = discord.utils.get(client.get_guild(message_server_id)).roles, name=val)
+        rolelist[key] = discord.utils.get(client.get_guild(message_server_id).roles, name=val)
     if 'irassyai-channel' in str(message.channel):
         is_rolech = True
     elif 'test' in str(message.channel):
