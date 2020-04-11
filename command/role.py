@@ -21,7 +21,7 @@ message_id = 697085942779084841
 @client.event
 async def on_ready():
     global fixed_message
-    emoji_role = {'NS': 'NS', 'NC': 'NC', 'TR': 'TR', 'VS': 'VS', 'JPC': 'Mercenary', '🟦': 'MainNC', '🟥': 'MainTR', '🟪': 'MainVS',
+    emoji_role = {'NS': 'NS', 'NC': 'MainNC', 'TR': 'MainTR', 'VS': 'MainVS', 'JPC': 'Mercenary', '🟦': 'NC', '🟥': 'TR', '🟪': 'VS',
                 '1️⃣': 'Soltech', '2️⃣': 'Connery', '3️⃣': 'Emerald', '4️⃣': 'Miller'}
     fixed_message = await client.get_guild(message_server_id).get_channel(message_channel_id).fetch_message(message_id)
     for emoji_name in emoji_role.keys():
@@ -36,8 +36,8 @@ async def on_raw_reaction_add(payload):
     if not payload.member.bot:
         if payload.message_id == message_id:
             rolelist = {}
-            emoji_role = {'NS': 'NS', 'NC': 'NC', 'TR': 'TR', 'VS': 'VS', 'JPC': 'Mercenary', '🟦': 'MainNC', '🟥': 'MainTR', '🟪': 'MainVS',
-                    '2️⃣': 'Connery', '3️⃣': 'Emerald', '1️⃣': 'Soltech', '4️⃣': 'Miller'}
+            emoji_role = {'NS': 'NS', 'NC': 'MainNC', 'TR': 'MainTR', 'VS': 'MainVS', 'JPC': 'Mercenary', '🟦': 'NC', '🟥': 'TR', '🟪': 'VS',
+                '1️⃣': 'Soltech', '2️⃣': 'Connery', '3️⃣': 'Emerald', '4️⃣': 'Miller'}
             for role_name in emoji_role.values():
                 rolelist[role_name] = discord.utils.get(client.get_guild(message_server_id).roles, name=role_name)
             emoji_name = payload.emoji.name
