@@ -83,8 +83,8 @@ async def on_ready():
         description=event_body,
         color=discord.Color.orange(),
     )
-    await client.get_guild(server_id).get_channel(alert_channle_id).purge(limit=2)
-    await client.get_guild(server_id).get_channel(alert_channle_id).send(embed=em)
-    await client.get_guild(server_id).get_channel(alert_channle_id).send(file=discord.File(current_dir+'pop.png'))
+    await client.get_guild(server_id).get_channel(alert_channel_id).purge(limit=2)
+    await client.get_guild(server_id).get_channel(alert_channel_id).send(embed=em)
+    await client.get_guild(server_id).get_channel(alert_channel_id).send(file=discord.File(current_dir+'pop.png'))
     # ---------Send Message Part END---------#
 client.run(token)
