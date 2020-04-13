@@ -16,18 +16,21 @@ token = os.environ['token']
 #     config.read(current_dir+'/token.ini')
 #     token = config.get("token", 'token')
 
-role_channel_id = 697084660773027880
-server_id = 344369434103906314
-readme_channnel_id = 344369530752991243
-zatsudan_channel_id = 344369434103906315
-irassyai_channel_id = 369047151772303370
+config = configparser.ConfigParser()
+config.read(current_dir + "/../config.ini")
+
+server_id = config['Server']['Server_ID']
+role_channel_id = config['Channel']['Role_Channel_ID']
+readme_channel_id = config['Channel']['Readme_Channel_ID']
+zatsudan_channel_id = config['Channel']['Zatsudan_Channel_ID']
+irassyai_channel_id = config['Channel']['Irassyai_Channel_ID']
 
 @client.event
 async def on_member_join(member):
-    readme_channnel = client.get_guild(server_id).get_channel(readme_channnel_id)
+    readme_channnel = client.get_guild(server_id).get_channel(readme_channel_id)
     zatsudan_channel = client.get_guild(server_id).get_channel(zatsudan_channel_id)
     role_channel = client.get_guild(server_id).get_channel(role_channel_id)
-    with open(current_dir+"/../irassyai.txt", "r") as f:
+    with open(current_dir+"/../message_template/irassyai.txt", "r") as f:
         message_body = f.read()
     message_body = message_body.format(user=member.mention, readme=readme_channnel.mention, zatsudan=zatsudan_channel.mention, role_management=role_channel.mention)
     await client.get_guild(server_id).get_channel(irassyai_channel_id).send(message_body)
@@ -38,7 +41,7 @@ async def on_message(message):
     utc = timezone('UTC')
     pst = timezone('America/Los_Angeles')
     if message.content.startswith('!Help'):
-        with open(current_dir+"/../help.txt", "r") as f:
+        with open(current_dir+"/../message_template/help.txt", "r") as f:
             data = f.read()
         color = discord.Color.blue()
         em = discord.Embed(title='Help', description="\n\n" + data, colour=color)

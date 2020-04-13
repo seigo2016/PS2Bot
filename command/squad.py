@@ -3,6 +3,7 @@ import discord
 import configparser
 import os
 import random
+
 current_dir = os.path.dirname(os.path.abspath(__file__))
 client = discord.Client()
 token = os.environ['token']
@@ -12,6 +13,11 @@ token = os.environ['token']
 #     token = config.get("token", 'token')
 # platoon-lobby-VC "651979369702621196"
 
+config = configparser.ConfigParser()
+config.read(current_dir + "/../config.ini")
+
+server_id = config['Server']['Server_ID']
+
 def is_me(m):
     return m.user == client.user
 
@@ -20,7 +26,7 @@ emoji = []
 
 @client.event
 async def on_voice_state_update(member, before, after):
-    server = client.get_guild(344369434103906314)
+    server = client.get_guild(server_id)
     emoji.append(discord.utils.get(server.emojis, name='NC'))
     emoji.append(discord.utils.get(server.emojis, name='TR'))
     emoji.append(discord.utils.get(server.emojis, name='VS'))
@@ -46,7 +52,7 @@ async def on_voice_state_update(member, before, after):
 
 @client.event
 async def on_raw_reaction_add(payload):
-    server = client.get_guild(344369434103906314)
+    server = client.get_guild(server_id)
     power_color = {"NC":"\U0001F7E6","TR":"\U0001F7E5","VS":"\U0001F7EA", "NS":"\u2B1C"}
     flg = False
     for x, y in squad_list.items():

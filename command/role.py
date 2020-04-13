@@ -14,9 +14,12 @@ token = os.environ['token']
 #     config.read(current_dir+'/token.ini')
 #     token = config.get("token", 'token')
 
-message_channel_id = 697084660773027880
-message_server_id = 344369434103906314
-message_id = 697085942779084841
+config = configparser.ConfigParser()
+config.read(current_dir + "/../config.ini")
+
+server_id = config['Server']['Server_ID']
+role_channel_id = config['Channel']['Role_Channel_ID']
+message_id = config['Message']['Role_Message_ID']
 
 @client.event
 async def on_ready():
@@ -24,9 +27,9 @@ async def on_ready():
     emoji_role = {
         'JPC': 'Mercenary', 'NC': 'MainNC', 'TR': 'MainTR', 'VS': 'MainVS', 'NS': 'NS', '🟦': 'NC', '🟥': 'TR', '🟪': 'VS',
                 '1️⃣': 'Soltech', '2️⃣': 'Connery', '3️⃣': 'Emerald', '4️⃣': 'Miller'}
-    fixed_message = await client.get_guild(message_server_id).get_channel(message_channel_id).fetch_message(message_id)
+    fixed_message = await client.get_guild(server_id).get_channel(role_channel_id).fetch_message(message_id)
     for emoji_name in emoji_role.keys():
-        emoji = discord.utils.get(client.get_guild(message_server_id).emojis, name=emoji_name)
+        emoji = discord.utils.get(client.get_guild(server_id).emojis, name=emoji_name)
         if emoji:
             await fixed_message.add_reaction(emoji)
         else:
@@ -40,7 +43,7 @@ async def on_raw_reaction_add(payload):
             emoji_role = {'NS': 'NS', 'NC': 'MainNC', 'TR': 'MainTR', 'VS': 'MainVS', 'JPC': 'Mercenary', '🟦': 'NC', '🟥': 'TR', '🟪': 'VS',
                 '1️⃣': 'Soltech', '2️⃣': 'Connery', '3️⃣': 'Emerald', '4️⃣': 'Miller'}
             for role_name in emoji_role.values():
-                rolelist[role_name] = discord.utils.get(client.get_guild(message_server_id).roles, name=role_name)
+                rolelist[role_name] = discord.utils.get(client.get_guild(server_id).roles, name=role_name)
             emoji_name = payload.emoji.name
             if emoji_name in emoji_role:
                 select_role = rolelist[emoji_role[emoji_name]]
@@ -50,12 +53,12 @@ async def on_raw_reaction_add(payload):
                 else:
                     await payload.member.add_roles(select_role)
                     body = f"`{payload.member}` さんに  `{select_role}` 役職を追加しました \n(このメッセージは一定時間で消去されます)"
-                emoji = discord.utils.get(client.get_guild(message_server_id).emojis, name=emoji_name)
+                emoji = discord.utils.get(client.get_guild(server_id).emojis, name=emoji_name)
                 if emoji:
                     await fixed_message.remove_reaction(emoji, payload.member)
                 else:
                     await fixed_message.remove_reaction(emoji_name, payload.member)
-                reply_message = await client.get_guild(message_server_id).get_channel(message_channel_id).send(body)
+                reply_message = await client.get_guild(server_id).get_channel(role_channel_id).send(body)
                 await asyncio.sleep(30)
                 await reply_message.delete()
 
@@ -74,7 +77,7 @@ async def on_message(message):
     rmrolelist = []
     is_rolech = False
     for key, val in add_role.items():
-        rolelist[key] = discord.utils.get(client.get_guild(message_server_id).roles, name=val)
+        rolelist[key] = discord.utils.get(client.get_guild(server_id).roles, name=val)
     if 'irassyai-channel' in str(message.channel):
         is_rolech = True
     elif 'test' in str(message.channel):

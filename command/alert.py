@@ -21,6 +21,11 @@ token = os.environ['token']
 #     config.read(current_dir+'/token.ini')
 #     token = config.get("token", 'token')
 
+config = configparser.ConfigParser()
+config.read(current_dir + "/../config.ini")
+
+server_id = config['Server']['Server_ID']
+alert_channel_id = config['Channel']['Alert_Channel_ID']
 
 @client.event
 async def on_ready():
@@ -78,8 +83,8 @@ async def on_ready():
         description=event_body,
         color=discord.Color.orange(),
     )
-    await client.get_guild(344369434103906314).get_channel(387540823551639552).purge(limit=2)
-    await client.get_guild(344369434103906314).get_channel(387540823551639552).send(embed=em)
-    await client.get_guild(344369434103906314).get_channel(387540823551639552).send(file=discord.File(current_dir+'pop.png'))
+    await client.get_guild(server_id).get_channel(alert_channle_id).purge(limit=2)
+    await client.get_guild(server_id).get_channel(alert_channle_id).send(embed=em)
+    await client.get_guild(server_id).get_channel(alert_channle_id).send(file=discord.File(current_dir+'pop.png'))
     # ---------Send Message Part END---------#
 client.run(token)
