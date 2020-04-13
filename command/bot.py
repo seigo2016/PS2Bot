@@ -18,7 +18,7 @@ token = os.environ['token']
 
 config = configparser.ConfigParser()
 config.read(current_dir + "/../config.ini")
-
+print(config)
 server_id = config['Server']['Server_ID']
 role_channel_id = config['Channel']['Role_Channel_ID']
 readme_channel_id = config['Channel']['Readme_Channel_ID']
