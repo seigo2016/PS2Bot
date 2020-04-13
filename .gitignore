@@ -103,7 +103,7 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-*.ini
+token.ini
 
 ps2bot/
 .DS_Store

@@ -16,7 +16,7 @@ token = os.environ['token']
 config = configparser.ConfigParser()
 config.read(current_dir + "/../config.ini")
 
-server_id = config['Server']['Server_ID']
+server_id = int(config['Server']['Server_ID'])
 
 def is_me(m):
     return m.user == client.user
