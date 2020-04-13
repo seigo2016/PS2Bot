@@ -18,12 +18,11 @@ token = os.environ['token']
 
 config = configparser.ConfigParser()
 config.read(current_dir + "/../config.ini")
-print(config)
-server_id = config['Server']['Server_ID']
-role_channel_id = config['Channel']['Role_Channel_ID']
-readme_channel_id = config['Channel']['Readme_Channel_ID']
-zatsudan_channel_id = config['Channel']['Zatsudan_Channel_ID']
-irassyai_channel_id = config['Channel']['Irassyai_Channel_ID']
+server_id = int(config['Server']['Server_ID'])
+role_channel_id = int(config['Channel']['Role_Channel_ID'])
+readme_channel_id = int(config['Channel']['Readme_Channel_ID'])
+zatsudan_channel_id = int(config['Channel']['Zatsudan_Channel_ID'])
+irassyai_channel_id = int(config['Channel']['Irassyai_Channel_ID'])
 
 @client.event
 async def on_member_join(member):

@@ -24,8 +24,8 @@ token = os.environ['token']
 config = configparser.ConfigParser()
 config.read(current_dir + "/../config.ini")
 
-server_id = config['Server']['Server_ID']
-alert_channel_id = config['Channel']['Alert_Channel_ID']
+server_id = int(config['Server']['Server_ID'])
+alert_channel_id = int(config['Channel']['Alert_Channel_ID'])
 
 @client.event
 async def on_ready():

@@ -16,10 +16,9 @@ token = os.environ['token']
 
 config = configparser.ConfigParser()
 config.read(current_dir + "/../config.ini")
-
-server_id = config['Server']['Server_ID']
-role_channel_id = config['Channel']['Role_Channel_ID']
-message_id = config['Message']['Role_Message_ID']
+server_id = int(config['Server']['Server_ID'])
+role_channel_id = int(config['Channel']['Role_Channel_ID'])
+message_id = int(config['Message']['Role_Message_ID'])
 
 @client.event
 async def on_ready():
