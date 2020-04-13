@@ -16,6 +16,21 @@ token = os.environ['token']
 #     config.read(current_dir+'/token.ini')
 #     token = config.get("token", 'token')
 
+role_channel_id = 697084660773027880
+server_id = 344369434103906314
+readme_channnel_id = 344369530752991243
+zatsudan_channel_id = 344369434103906315
+irassyai_channel_id = 369047151772303370
+
+@client.event
+async def on_member_join(member):
+    readme_channnel = client.get_guild(server_id).get_channel(readme_channnel_id)
+    zatsudan_channel = client.get_guild(server_id).get_channel(zatsudan_channel_id)
+    role_channel = client.get_guild(server_id).get_channel(role_channel_id)
+    with open(current_dir+"/../irrasyai.txt", "r") as f:
+        message_body = f.read()
+    message_body = message_body.format(user=member.mention, readme=readme_channnel.mention, zatsudan=zatsudan_channel.mention, role_management=role_channel.mention)
+    await client.get_guild(server_id).get_channel(irassyai_channel_id).send(message_body)
 
 @client.event
 async def on_message(message):
