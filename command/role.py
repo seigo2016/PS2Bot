@@ -21,7 +21,8 @@ message_id = 697085942779084841
 @client.event
 async def on_ready():
     global fixed_message
-    emoji_role = {'NS': 'NS', 'NC': 'MainNC', 'TR': 'MainTR', 'VS': 'MainVS', 'JPC': 'Mercenary', '🟦': 'NC', '🟥': 'TR', '🟪': 'VS',
+    emoji_role = {
+        'JPC': 'Mercenary', 'NC': 'MainNC', 'TR': 'MainTR', 'VS': 'MainVS', 'NS': 'NS', '🟦': 'NC', '🟥': 'TR', '🟪': 'VS',
                 '1️⃣': 'Soltech', '2️⃣': 'Connery', '3️⃣': 'Emerald', '4️⃣': 'Miller'}
     fixed_message = await client.get_guild(message_server_id).get_channel(message_channel_id).fetch_message(message_id)
     for emoji_name in emoji_role.keys():
