@@ -32,7 +32,9 @@ async def on_member_join(member):
     with open(current_dir+"/../message_template/irassyai.txt", "r") as f:
         message_body = f.read()
     message_body = message_body.format(user=member.mention, readme=readme_channnel.mention, zatsudan=zatsudan_channel.mention, role_management=role_channel.mention)
+    default_role = discord.utils.get(client.get_guild(server_id).roles, name="参加者")
     await client.get_guild(server_id).get_channel(irassyai_channel_id).send(message_body)
+    await member.add_roles(default_role)
 
 @client.event
 async def on_message(message):
