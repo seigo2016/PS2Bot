@@ -52,6 +52,11 @@ async def on_voice_state_update(member, before, after):
 
 @client.event
 async def on_raw_reaction_add(payload):
+    emoji_nc_id = 384317676870303745
+    emoji_tr_id = 384317719098425347
+    emoji_vs_id = 384317750593585152
+    emoji_ns_id = 653944468356988938
+    power_emoji = {emoji_nc_id:"NC", emoji_tr_id:"TR", emoji_vs_id: "VS", emoji_ns_id:"NS"}
     server = client.get_guild(server_id)
     power_color = {"NC":"\U0001F7E6","TR":"\U0001F7E5","VS":"\U0001F7EA", "NS":"\u2B1C"}
     flg = False
@@ -66,8 +71,8 @@ async def on_raw_reaction_add(payload):
             break
     user = server.get_member(payload.user_id)
     if payload.user_id != client.user.id and user == squad_list[vc_id]["user"]:
-        power_name = payload.emoji.name.lower()
-        name = "{}_squad{}".format(power_name,power_color[payload.emoji.name])
+        power_name = power_emoji[payload.emoji.id]
+        name = "{}_squad{}".format(power_name,power_color[power_name])
         vc_ch = client.get_channel(vc_id)
         text_ch  = client.get_channel(payload.channel_id)
         await text_ch.edit(name=name)

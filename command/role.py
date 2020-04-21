@@ -33,11 +33,6 @@ async def on_ready():
                 '1️⃣': 'Soltech', '2️⃣': 'Connery', '3️⃣': 'Emerald', '4️⃣': 'Miller'}
     fixed_message = await client.get_guild(server_id).get_channel(role_channel_id).fetch_message(message_id)
     for emoji_name in emoji_role.keys():
-        # if type(emoji_name) == discord.emoji.Emoji:
-        # emoji = discord.utils.get(client.get_guild(server_id).emojis, name=emoji_name)
-        # if emoji:
-        #     await fixed_message.add_reaction(emoji)
-        # else:
         await fixed_message.add_reaction(emoji_name)
 
 @client.event
