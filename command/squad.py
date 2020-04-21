@@ -27,10 +27,10 @@ emoji = []
 @client.event
 async def on_voice_state_update(member, before, after):
     server = client.get_guild(server_id)
-    emoji.append(discord.utils.get(server.emojis, name='NC'))
-    emoji.append(discord.utils.get(server.emojis, name='TR'))
-    emoji.append(discord.utils.get(server.emojis, name='VS'))
-    emoji.append(discord.utils.get(server.emojis, name='NS'))
+    emoji.append(client.get_emoji(384317676870303745))
+    emoji.append(client.get_emoji(384317719098425347))
+    emoji.append(client.get_emoji(384317750593585152))
+    emoji.append(client.get_emoji(653944468356988938))
     if "squad-lobby" in str(after.channel):
         vc_ch = await server.create_voice_channel("squad", category=after.channel.category)
         text_ch = await server.create_text_channel("squad", category=after.channel.category)
