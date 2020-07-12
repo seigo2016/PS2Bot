@@ -42,7 +42,7 @@ async def on_voice_state_update(member, before, after):
         squad_list[vc_ch.id]["msg_id"] = text_id
         for i in emoji:
             await text.add_reaction(i)
-    elif (after.channel == None or after.channel != before.channel) and len(before.channel.members) == 0:  #and str(before.channel) != "squad-lobby") and len(before.channel.members) == 0:
+    elif (after.channel == None or after.channel != before.channel) and len(before.channel.members) == 0 and str(before.channel) != "squad-lobby": # and len(before.channel.members) == 0:
         text_ch = client.get_channel(squad_list[before.channel.id]["text_id"])
         vc_ch = client.get_channel(before.channel.id)
         squad_list.pop(before.channel.id)
