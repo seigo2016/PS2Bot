@@ -77,5 +77,5 @@ async def on_raw_reaction_add(payload):
         text_ch  = client.get_channel(payload.channel_id)
         await text_ch.edit(name=name)
         await vc_ch.edit(name=name)
-        
+
 client.run(token)
