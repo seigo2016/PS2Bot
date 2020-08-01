@@ -26,6 +26,7 @@ emoji = []
 
 @client.event
 async def on_voice_state_update(member, before, after):
+    global squad_list
     server = client.get_guild(server_id)
     emoji.append(client.get_emoji(384317676870303745))
     emoji.append(client.get_emoji(384317719098425347))
@@ -42,6 +43,7 @@ async def on_voice_state_update(member, before, after):
         squad_list[vc_ch.id]["msg_id"] = text_id
         for i in emoji:
             await text.add_reaction(i)
+        print(squad_list)
     elif (after.channel == None or after.channel != before.channel) and len(before.channel.members) == 0 and str(before.channel) != "squad-lobby": # and len(before.channel.members) == 0:
         text_ch = client.get_channel(squad_list[before.channel.id]["text_id"])
         vc_ch = client.get_channel(before.channel.id)
@@ -52,6 +54,7 @@ async def on_voice_state_update(member, before, after):
 
 @client.event
 async def on_raw_reaction_add(payload):
+    print("reaction " + str(squad_list))
     emoji_nc_id = 384317676870303745
     emoji_tr_id = 384317719098425347
     emoji_vs_id = 384317750593585152
@@ -60,22 +63,29 @@ async def on_raw_reaction_add(payload):
     server = client.get_guild(server_id)
     power_color = {"NC":"\U0001F7E6","TR":"\U0001F7E5","VS":"\U0001F7EA", "NS":"\u2B1C"}
     flg = False
-    for x, y in squad_list.items():
-        try:
-            keys = [k for k, l in y.items() if l == payload.channel_id]
-            flg = True
-        except Exception as e:
-            print(e)
-        if flg:
-            vc_id = x
-            break
-    user = server.get_member(payload.user_id)
-    if payload.user_id != client.user.id and user == squad_list[vc_id]["user"]:
-        power_name = power_emoji[payload.emoji.id]
-        name = "{}_squad{}".format(power_name,power_color[power_name])
-        vc_ch = client.get_channel(vc_id)
-        text_ch  = client.get_channel(payload.channel_id)
-        await text_ch.edit(name=name)
-        await vc_ch.edit(name=name)
+    # for x, y in squad_list.items():
+    #     try:
+    #         keys = [k for k, l in y.items() if l == payload.channel_id]
+    #         flg = True
+    #     except Exception as e:
+    #         print(x, y)
+    #         print(e)
+    #     if flg:
+    #         vc_id = x
+    #         break
+    for vc_id, squad in squad_list.items():
+        # squad_value = squad.values()
+        if squad["text_id"] == payload.channel_id:
+            # vc_id = payload.channel_id
+            user = server.get_member(payload.user_id)
+            print(payload.user_id != client.user.id)
+            print(payload.user_id, client.user.id)
+            if payload.user_id != client.user.id and user == squad["user"]:
+                power_name = power_emoji[payload.emoji.id]
+                name = "{}_squad{}".format(power_name,power_color[power_name])
+                vc_ch = client.get_channel(vc_id)
+                text_ch  = client.get_channel(payload.channel_id)
+                await text_ch.edit(name=name)
+                await vc_ch.edit(name=name)
 
 client.run(token)
