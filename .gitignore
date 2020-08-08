@@ -107,3 +107,5 @@ token.ini
 
 ps2bot/
 .DS_Store
+.vscode
+*.png
