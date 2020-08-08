@@ -26,8 +26,8 @@ emoji = []
 
 @client.event
 async def on_voice_state_update(member, before, after):
-    print(squad_list)
     global squad_list
+    print(squad_list)
     server = client.get_guild(server_id)
     emoji.append(client.get_emoji(384317676870303745))
     emoji.append(client.get_emoji(384317719098425347))
