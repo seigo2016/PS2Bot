@@ -43,7 +43,8 @@ async def on_voice_state_update(member, before, after):
         squad_list[vc_ch.id]["msg_id"] = text_id
         for i in emoji:
             await text.add_reaction(i)
-    if (after.channel == None or after.channel != before.channel) and str(before.channel) != "squad-lobby":
+    # if (after.channel == None or after.channel != before.channel) and str(before.channel) != "squad-lobby":
+    if before.channel in squad_list:
         print("test")
         if before.channel and len(before.channel.members) == 0:
             text_ch = client.get_channel(squad_list[before.channel.id]["text_id"])
@@ -55,7 +56,7 @@ async def on_voice_state_update(member, before, after):
 
 @client.event
 async def on_raw_reaction_add(payload):
-    print("reaction " + str(squad_list))
+    # print("reaction " + str(squad_list))
     emoji_nc_id = 384317676870303745
     emoji_tr_id = 384317719098425347
     emoji_vs_id = 384317750593585152
