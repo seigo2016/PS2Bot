@@ -45,7 +45,7 @@ async def on_voice_state_update(member, before, after):
         for i in emoji:
             await text.add_reaction(i)
     # if (after.channel == None or after.channel != before.channel) and str(before.channel) != "squad-lobby":
-    if before.channel in squad_list:
+    if before.channel.id in squad_list:
         print("test")
         if before.channel and len(before.channel.members) == 0:
             text_ch = client.get_channel(squad_list[before.channel.id]["text_id"])
