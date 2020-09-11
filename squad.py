@@ -40,6 +40,7 @@ class ManageSquad(commands.Cog):
             await member.move_to(vc_ch)
             text = await text_ch.send(body)
             text_id = text.id
+            # print(self.squad_list)
             self.squad_list[vc_ch.id]["msg_id"] = text_id
             for i in self.emoji.values():
                 await text.add_reaction(i)
