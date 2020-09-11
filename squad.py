@@ -41,7 +41,7 @@ class ManageSquad(commands.Cog):
             text = await text_ch.send(body)
             text_id = text.id
             self.squad_list[vc_ch.id]["msg_id"] = text_id
-            for i in self.emoji:
+            for i in self.emoji.values():
                 await text.add_reaction(i)
 
         if before.channel and before.channel.id in self.squad_list:
