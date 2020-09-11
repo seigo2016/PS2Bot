@@ -22,11 +22,11 @@ class ManageSquad(commands.Cog):
     async def on_ready(self):
         self.squad_list = {}
         self.emoji = {}
-        emoji_id = {"NC":384317676870303745, "TR": 384317719098425347, "VS": 384317750593585152, "NS": 653944468356988938}
-        self.emoji["NC"] = self.bot.get_emoji(emoji_id["NC"])
-        self.emoji["TR"] = self.bot.get_emoji(emoji_id["TR"])
-        self.emoji["VS"] = self.bot.get_emoji(emoji_id["VS"])
-        self.emoji["NS"] = self.bot.get_emoji(emoji_id["NS"])
+        self.emoji_id = {"NC":384317676870303745, "TR": 384317719098425347, "VS": 384317750593585152, "NS": 653944468356988938}
+        self.emoji["NC"] = self.bot.get_emoji(self.emoji_id["NC"])
+        self.emoji["TR"] = self.bot.get_emoji(self.emoji_id["TR"])
+        self.emoji["VS"] = self.bot.get_emoji(self.emoji_id["VS"])
+        self.emoji["NS"] = self.bot.get_emoji(self.emoji_id["NS"])
         self.server = self.bot.get_guild(server_id)
 
 
@@ -55,7 +55,7 @@ class ManageSquad(commands.Cog):
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
-        power_emoji = {emoji_nc_id:"NC", emoji_tr_id:"TR", emoji_vs_id: "VS", emoji_ns_id:"NS"}
+        power_emoji = {self.emoji_id["NC"]:"NC", self.emoji_id["TR"]:"TR", self.emoji_id["VS"]: "VS", self.emoji_id["NS"]:"NS"}
         power_color = {"NC":"\U0001F7E6","TR":"\U0001F7E5","VS":"\U0001F7EA", "NS":"\u2B1C"}
         for vc_id, squad in self.squad_list.items():
             if squad["text_id"] == payload.channel_id:
