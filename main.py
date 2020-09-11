@@ -7,8 +7,8 @@ from discord.ext import commands
 #     config.read(current_dir+'/token.ini')
 #     token = config.get("token", 'token')
 client = commands.Bot(command_prefix='')
-# client.load_extension('bot')
-# client.load_extension('role')
+client.load_extension('bot')
+client.load_extension('role')
 client.load_extension('squad')
 token = os.environ['token']
 
