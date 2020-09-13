@@ -5,6 +5,7 @@ attrs==20.2.0
 autopep8==1.5.4
 chardet==3.0.4
 discord.py==1.4.1
+feedparser==5.2.1
 flake8==3.8.3
 greenlet==0.4.16
 idna==2.10
