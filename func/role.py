@@ -1,15 +1,17 @@
 # coding:utf-8
 from discord.ext import commands
+import discord
+
 import configparser
 import os
+
 import time
 import asyncio
-import discord
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
 config = configparser.ConfigParser()
-config.read(current_dir + "/config.ini")
+config.read(current_dir + "/../config.ini")
 server_id = int(config['Server']['Server_ID'])
 role_channel_id = int(config['Channel']['Role_Channel_ID'])
 message_id = int(config['Message']['Role_Message_ID'])

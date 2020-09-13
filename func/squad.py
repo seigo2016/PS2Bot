@@ -7,11 +7,9 @@ from discord.ext import commands
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
 config = configparser.ConfigParser()
-config.read(current_dir + "/config.ini")
+config.read(current_dir + "/../config.ini")
 server_id = int(config['Server']['Server_ID'])
 
-def is_me(m):
-    return m.user == self.bot.user
 
 class ManageSquad(commands.Cog):
 
@@ -40,7 +38,6 @@ class ManageSquad(commands.Cog):
             await member.move_to(vc_ch)
             text = await text_ch.send(body)
             text_id = text.id
-            # print(self.squad_list)
             self.squad_list[vc_ch.id]["msg_id"] = text_id
             for i in self.emoji.values():
                 await text.add_reaction(i)
