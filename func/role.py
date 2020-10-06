@@ -50,8 +50,8 @@ class ManageRole(commands.Cog):
         if not payload.member.bot:
             if payload.message_id == message_id:
                 rolelist = {}
-                self.emoji_role = {self.emoji_jpc_id: 'Mercenary', self.emoji_nc_id: 'MainNC', self.emoji_tr_id: 'MainTR', self.emoji_vs_id: 'MainVS', self.emoji_ns_id: 'NS', '🟦': 'NC', '🟥': 'TR', '🟪': 'VS',
-                    '1️⃣': 'Soltech', '2️⃣': 'Connery', '3️⃣': 'Emerald', '4️⃣': 'Miller'}
+                # self.emoji_role = {self.emoji_jpc_id: 'Mercenary', self.emoji_nc_id: 'MainNC', self.emoji_tr_id: 'MainTR', self.emoji_vs_id: 'MainVS', self.emoji_ns_id: 'NS', '🟦': 'NC', '🟥': 'TR', '🟪': 'VS',
+                #     '1️⃣': 'Soltech', '2️⃣': 'Connery', '3️⃣': 'Emerald', '4️⃣': 'Miller'}
                 for role_name in self.emoji_role.values():
                     rolelist[role_name] = discord.utils.get(self.bot.get_guild(server_id).roles, name=role_name)
                 self.emoji_name = payload.emoji.name
