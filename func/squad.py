@@ -3,21 +3,26 @@ import discord
 import configparser
 import os
 from discord.ext import commands
+import asyncio
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
 config = configparser.ConfigParser()
 config.read(current_dir + "/../config.ini")
 server_id = int(config['Server']['Server_ID'])
+channel_id = int(config['Channel']['Squad_Role_Channel_ID'])
+role_message_id = int(config['Message']['Squad_Role_Message_ID'])
 
 
 class ManageSquad(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+    
 
     @commands.Cog.listener()
     async def on_ready(self):
+        self.server = self.bot.get_guild(server_id)
         self.squad_list = {}
         self.mention_message = {}
         self.emoji = {}
@@ -26,12 +31,14 @@ class ManageSquad(commands.Cog):
         self.emoji["TR"] = self.bot.get_emoji(self.emoji_id["TR"])
         self.emoji["VS"] = self.bot.get_emoji(self.emoji_id["VS"])
         self.emoji["NS"] = self.bot.get_emoji(self.emoji_id["NS"])
-        self.server = self.bot.get_guild(server_id)
         self.role = {}
         self.role["NC"] = self.server.get_role(762872826331136020)
         self.role["TR"] =  self.server.get_role(762873053541433368)
         self.role["VS"] =  self.server.get_role(762873057064648735)
         self.role["NS"] =  self.server.get_role(762874007926079488)
+        role_message = await self.bot.get_guild(server_id).get_channel(channel_id).fetch_message(role_message_id)
+        for i in self.emoji.values():
+            await role_message.add_reaction(i)
 
 
     @commands.Cog.listener()
@@ -61,8 +68,22 @@ class ManageSquad(commands.Cog):
     async def on_raw_reaction_add(self, payload):
         power_emoji = {self.emoji_id["NC"]:"NC", self.emoji_id["TR"]:"TR", self.emoji_id["VS"]: "VS", self.emoji_id["NS"]:"NS"}
         power_color = {"NC":"\U0001F7E6","TR":"\U0001F7E5","VS":"\U0001F7EA", "NS":"\u2B1C"}
-        if payload.member == self.bot.user:
+        if payload.member.bot:
             pass
+        elif payload.message_id == role_message_id:
+            if payload.emoji.id in power_emoji:
+                squad_role_ch  = self.bot.get_channel(payload.channel_id)
+                select_emoji = power_emoji[payload.emoji.id]
+                select_role = self.role[select_emoji]
+                if select_role in payload.member.roles:
+                    await payload.member.remove_roles(select_role)
+                    body = f"`{payload.member}` さんの  `{select_role}` 役職を削除しました \n(このメッセージは一定時間で消去されます)"
+                else:
+                    await payload.member.add_roles(select_role)
+                    body = f"`{payload.member}` さんに  `{select_role}` 役職を追加しました \n(このメッセージは一定時間で消去されます)"
+                reply_message = await squad_role_ch.send(body)
+                await asyncio.sleep(30)
+                await reply_message.delete()
         elif payload.message_id in self.mention_message:
             if payload.emoji.name == "🇾":
                 text_ch  = self.bot.get_channel(payload.channel_id)
