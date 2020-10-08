@@ -26,6 +26,11 @@ class JoinMember(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    
+    @commands.Cog.listener()
+    async def on_ready(self):
+        await self.bot.change_presence(activity=discord.Game(name='PlanetSide2'))
+
     @commands.Cog.listener()
     async def on_member_join(self, member):
         readme_channnel = self.bot.get_guild(server_id).get_channel(readme_channel_id)
