@@ -84,6 +84,7 @@ class ManageSquad(commands.Cog):
                 reply_message = await squad_role_ch.send(body)
                 await asyncio.sleep(30)
                 await reply_message.delete()
+                await reply_message.remove_reaction(payload.emoji, payload.member)
         elif payload.message_id in self.mention_message:
             if payload.emoji.name == "🇾":
                 text_ch  = self.bot.get_channel(payload.channel_id)
