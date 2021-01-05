@@ -17,7 +17,6 @@ role_channel_id = int(config['Channel']['Role_Channel_ID'])
 message_id = int(config['Message']['Role_Message_ID'])
 
 class ManageRole(commands.Cog):
-
     def __init__(self, bot):
         self.bot = bot
 
