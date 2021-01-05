@@ -25,7 +25,7 @@ class ManageRole(commands.Cog):
     async def on_ready(self):
         emoji_main_nc = self.bot.get_emoji(384317676870303745)
         emoji_main_tr = self.bot.get_emoji(384317719098425347)
-        emoji_main_vs = self.bot.get_emoji(653944468356988938)
+        emoji_main_vs = self.bot.get_emoji(384317750593585152)
         emoji_main_ns = self.bot.get_emoji(653944468356988938)
         emoji_main_jpc = self.bot.get_emoji(701436271410544660)
         self.emoji_role = {
@@ -38,6 +38,7 @@ class ManageRole(commands.Cog):
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
+        print(payload)
         if payload.member.bot:
             pass
         elif payload.message_id == message_id:
