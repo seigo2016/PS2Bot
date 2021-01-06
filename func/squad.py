@@ -47,10 +47,12 @@ class ManageSquad(commands.Cog):
             vc_ch = await self.server.create_voice_channel("squad", category=after.channel.category)
             text_ch = await self.server.create_text_channel("squad", category=after.channel.category)
             self.squad_list.update({vc_ch.id:{"text_id":text_ch.id, "msg_id":"", "user":member}})
+            # print("test1", vc_ch.id)
             body = f"{member.mention}\n 小隊が編成されました。\n勢力を選択してください\n"
             await member.move_to(vc_ch)
             text = await text_ch.send(body)
             text_id = text.id
+            # print("test2", vc_ch.id)
             self.squad_list[vc_ch.id]["msg_id"] = text_id
             for i in self.emoji.values():
                 await text.add_reaction(i)
