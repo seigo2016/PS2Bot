@@ -1,7 +1,7 @@
 # coding:utf-8
 import os
 from discord.ext import commands
-
+# test
 client = commands.Bot(command_prefix='')
 client.load_extension('func.bot')
 client.load_extension('func.role')
