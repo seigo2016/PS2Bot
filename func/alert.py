@@ -9,19 +9,22 @@ from datetime import datetime, timedelta, timezone
 import json
 import os
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
-config = configparser.ConfigParser()
-config.read(current_dir + "/../config.ini")
-
-server_id = int(config['Server']['Server_ID'])
-alert_channel_id = int(config['Channel']['Alert_Channel_ID'])
-
 
 class Alert(commands.Cog):
 
-    def __init__(self, bot):
+    def __init__(self, bot, env):
         self.bot = bot
         self.notice_alert.start()
+
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        config = configparser.ConfigParser()
+        if env == "dev":
+            config.read(current_dir + "/../config-dev.ini")
+        else:
+            config.read(current_dir + "/../config.ini")
+
+        self.server_id = int(config['Server']['Server_ID'])
+        self.alert_channel_id = int(config['Channel']['Alert_Channel_ID'])
 
     @tasks.loop(minutes=5.0)
     async def notice_alert(self):
@@ -46,8 +49,8 @@ class Alert(commands.Cog):
             description=event_body,
             color=discord.Color.orange(),
         )
-        await self.bot.get_guild(server_id).get_channel(alert_channel_id).purge(limit=1)
-        await self.bot.get_guild(server_id).get_channel(alert_channel_id).send(embed=em)
+        await self.bot.get_guild(self.server_id).get_channel(self.alert_channel_id).purge(limit=1)
+        await self.bot.get_guild(self.server_id).get_channel(self.alert_channel_id).send(embed=em)
         # ---------Send Message Part END---------#
 
     @notice_alert.before_loop
@@ -55,5 +58,5 @@ class Alert(commands.Cog):
         print('waiting...')
         await self.bot.wait_until_ready()
 
-def setup(bot):
-    bot.add_cog(Alert(bot))
+def setup(bot, env):
+    bot.add_cog(Alert(bot, env))

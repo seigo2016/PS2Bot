@@ -5,24 +5,24 @@ import os
 from discord.ext import commands
 import asyncio
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
-
-config = configparser.ConfigParser()
-config.read(current_dir + "/../config.ini")
-server_id = int(config['Server']['Server_ID'])
-channel_id = int(config['Channel']['Squad_Role_Channel_ID'])
-role_message_id = int(config['Message']['Squad_Role_Message_ID'])
-
-
 class ManageSquad(commands.Cog):
 
-    def __init__(self, bot):
+    def __init__(self, bot, env):
         self.bot = bot
-    
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        config = configparser.ConfigParser()
+        if env == "dev":
+            config.read(current_dir + "/../config-dev.ini")
+        else:
+            config.read(current_dir + "/../config.ini")
+        self.server_id = int(config['Server']['Server_ID'])
+        self.channel_id = int(config['Channel']['Squad_Role_Channel_ID'])
+        self.role_message_id = int(config['Message']['Squad_Role_Message_ID'])
+        print("test")
 
     @commands.Cog.listener()
     async def on_ready(self):
-        self.server = self.bot.get_guild(server_id)
+        self.server = self.bot.get_guild(self.server_id)
         self.squad_list = {}
         self.mention_message = {}
         self.emoji = {}
@@ -36,9 +36,9 @@ class ManageSquad(commands.Cog):
         self.role["TR"] =  self.server.get_role(762873053541433368)
         self.role["VS"] =  self.server.get_role(762873057064648735)
         self.role["NS"] =  self.server.get_role(762874007926079488)
-        role_message = await self.bot.get_guild(server_id).get_channel(channel_id).fetch_message(role_message_id)
+        self.role_message = await self.bot.get_guild(self.server_id).get_channel(self.channel_id).fetch_message(self.role_message_id)
         for i in self.emoji.values():
-            await role_message.add_reaction(i)
+            await self.role_message.add_reaction(i)
 
 
     @commands.Cog.listener()
@@ -47,12 +47,10 @@ class ManageSquad(commands.Cog):
             vc_ch = await self.server.create_voice_channel("squad", category=after.channel.category)
             text_ch = await self.server.create_text_channel("squad", category=after.channel.category)
             self.squad_list.update({vc_ch.id:{"text_id":text_ch.id, "msg_id":"", "user":member}})
-            # print("test1", vc_ch.id)
             body = f"{member.mention}\n 小隊が編成されました。\n勢力を選択してください\n"
             await member.move_to(vc_ch)
             text = await text_ch.send(body)
             text_id = text.id
-            # print("test2", vc_ch.id)
             self.squad_list[vc_ch.id]["msg_id"] = text_id
             for i in self.emoji.values():
                 await text.add_reaction(i)
@@ -72,7 +70,7 @@ class ManageSquad(commands.Cog):
         power_color = {"NC":"\U0001F7E6","TR":"\U0001F7E5","VS":"\U0001F7EA", "NS":"\u2B1C"}
         if payload.member.bot:
             pass
-        elif payload.message_id == role_message_id:
+        elif payload.message_id == self.role_message_id:
             if payload.emoji.id in power_emoji:
                 squad_role_ch  = self.bot.get_channel(payload.channel_id)
                 select_emoji = power_emoji[payload.emoji.id]
@@ -113,5 +111,5 @@ class ManageSquad(commands.Cog):
             
                     
 
-def setup(bot):
-    bot.add_cog(ManageSquad(bot))
+def setup(bot, env):
+    bot.add_cog(ManageSquad(bot, env))
