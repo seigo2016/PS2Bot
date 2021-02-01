@@ -82,9 +82,9 @@ class ManageSquad(commands.Cog):
                     await payload.member.add_roles(select_role)
                     body = f"`{payload.member}` さんに  `{select_role}` 役職を追加しました \n(このメッセージは一定時間で消去されます)"
                 reply_message = await squad_role_ch.send(body)
+                await self.role_message.remove_reaction(payload.emoji, payload.member)
                 await asyncio.sleep(30)
                 await reply_message.delete()
-                await self.role_message.remove_reaction(payload.emoji, payload.member)
         elif payload.message_id in self.mention_message:
             if payload.emoji.name == "🇾":
                 text_ch  = self.bot.get_channel(payload.channel_id)
@@ -97,12 +97,11 @@ class ManageSquad(commands.Cog):
             for vc_id, squad in self.squad_list.items():
                 if squad["text_id"] == payload.channel_id:
                     user = self.server.get_member(payload.user_id)
-                    if payload.user_id != self.bot.user.id and user == squad["user"]:
+                    if user == squad["user"]:
                         power_name = power_emoji[payload.emoji.id]
                         name = "{}_squad{}".format(power_name, power_color[power_name])
-                        vc_ch = await self.bot.get_channel(vc_id)
-                        text_ch  = await self.bot.get_channel(payload.channel_id)
-                        print(text_ch)
+                        vc_ch = self.bot.get_channel(vc_id)
+                        text_ch  = self.bot.get_channel(payload.channel_id)
                         await text_ch.edit(name=name)
                         await vc_ch.edit(name=name)
                         mention_text = await text_ch.send("メンションを送りますか？")
