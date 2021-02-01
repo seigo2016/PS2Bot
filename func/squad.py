@@ -84,7 +84,7 @@ class ManageSquad(commands.Cog):
                 reply_message = await squad_role_ch.send(body)
                 await asyncio.sleep(30)
                 await reply_message.delete()
-                await reply_message.remove_reaction(payload.emoji, payload.member)
+                await self.role_message.remove_reaction(payload.emoji, payload.member)
         elif payload.message_id in self.mention_message:
             if payload.emoji.name == "🇾":
                 text_ch  = self.bot.get_channel(payload.channel_id)
@@ -100,16 +100,15 @@ class ManageSquad(commands.Cog):
                     if payload.user_id != self.bot.user.id and user == squad["user"]:
                         power_name = power_emoji[payload.emoji.id]
                         name = "{}_squad{}".format(power_name, power_color[power_name])
-                        vc_ch = self.bot.get_channel(vc_id)
-                        text_ch  = self.bot.get_channel(payload.channel_id)
+                        vc_ch = await self.bot.get_channel(vc_id)
+                        text_ch  = await self.bot.get_channel(payload.channel_id)
+                        print(text_ch)
                         await text_ch.edit(name=name)
                         await vc_ch.edit(name=name)
                         mention_text = await text_ch.send("メンションを送りますか？")
                         await mention_text.add_reaction("🇾")
                         await mention_text.add_reaction("🇳")
                         self.mention_message.update({mention_text.id: power_name})
-            
-                    
 
 def setup(bot, env):
     bot.add_cog(ManageSquad(bot, env))
