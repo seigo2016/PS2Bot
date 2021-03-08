@@ -29,7 +29,7 @@ class JoinMember(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        await self.bot.change_presence(activity=discord.Game(name='PlanetSide2'))
+        await self.bot.change_presence(activity=discord.Game(name='PlanetSide 2'))
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
