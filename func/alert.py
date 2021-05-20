@@ -2,13 +2,13 @@
 # coding:utf-8
 import discord
 from discord.ext import tasks, commands
-import feedparser
 import configparser
-import time
 from datetime import datetime, timedelta, timezone
-import json
 import os
-
+import requests
+import matplotlib.pyplot as plt
+import numpy as np
+import io
 
 class Alert(commands.Cog):
 
@@ -25,33 +25,48 @@ class Alert(commands.Cog):
 
         self.server_id = int(config['Server']['Server_ID'])
         self.alert_channel_id = int(config['Channel']['Alert_Channel_ID'])
+        self.population_url = "https://ps2.fisu.pw/api/population/?world=40"
+        self.JST = timezone(timedelta(hours=+9), 'JST')
 
     @tasks.loop(minutes=5.0)
     async def notice_alert(self):
-        # print("Start")
-        # ---------Event Information Part START---------#
-        alert_rss_url = "https://ps2.fisu.pw/alert/rss?type=CURRENT"
-        alert_rss_dic = feedparser.parse(alert_rss_url)
-        contents_list = alert_rss_dic["entries"]
-        event_body = ""
-        for content in contents_list:
-            title = content["title"] # title
-            summary = content["summary"] # summary
-            published_parsed = content["published_parsed"]# published_parsed
-            jst = timezone(timedelta(hours=+9), 'Asia/Tokyo')
-            published_time = datetime(*published_parsed[:6], tzinfo=timezone.utc).astimezone(jst)
-            event_body += f'**{title}**\n {summary}\n Start Time(JST): {published_time}\n'
-            event_body += "----------------------------------------\n\n"
-        # ---------Event Information Part END---------#
-        # ---------Send Message Part START---------#
-        em = discord.Embed(
-            title='Event Information',
-            description=event_body,
-            color=discord.Color.orange(),
-        )
-        await self.bot.get_guild(self.server_id).get_channel(self.alert_channel_id).purge(limit=1)
-        await self.bot.get_guild(self.server_id).get_channel(self.alert_channel_id).send(embed=em)
-        # ---------Send Message Part END---------#
+        result = requests.get(self.population_url)
+        json_data = result.json()["result"][0]
+        data = np.array([[json_data['vs'], json_data['nc'], json_data['tr'], json_data['ns']]])
+        pop_time = datetime.fromtimestamp(json_data['timestamp'], self.JST)
+        pop_time = pop_time.strftime('%Y-%m-%d %H:%M:%S')
+        data_cum=data.cumsum(axis=1)
+        category_names = ["VS", "NC", "TR", "NS"]
+        color = ["#612597", "#961100", "#1d4698", "#d3d3d3"]
+        lavel_color = ["#ffffff", "#ffffff", "#ffffff","#333333"]
+        plt.figure()
+        fig, ax = plt.subplots(figsize=(8, 1))
+        ax.invert_yaxis()
+        ax.xaxis.set_visible(False)
+        ax.set_xlim(0, np.sum(data, axis=1).max())
+
+        for i in range(4):
+            widths = data[:, i]
+            starts = data_cum[:, i] - widths
+            rects = ax.barh("Soltech", widths, height=0.5, left=starts, label=category_names[i], color=color[i])
+            ax.bar_label(rects, label_type='center', color=lavel_color[i])
+        ax.legend(ncol=len(category_names), bbox_to_anchor=(1.2, 1), loc='upper right', borderaxespad=0, fontsize='small')
+        ax.get_legend().remove()
+        
+        with io.BytesIO() as sio:
+            plt.savefig(sio, format="png")
+            plt.close()
+            sio.seek(0)
+            em = discord.Embed(
+                title='Current Population (soltech)',
+                description=f"(Last Update  {pop_time})",
+                color=discord.Color.orange(),
+            )
+            em.set_image(
+                url="attachment://image.png"
+            )
+            await self.bot.get_guild(self.server_id).get_channel(self.alert_channel_id).purge(limit=1)
+            await self.bot.get_guild(self.server_id).get_channel(self.alert_channel_id).send(embed=em, file=discord.File(sio, filename='image.png'))
 
     @notice_alert.before_loop
     async def before_ready(self):
