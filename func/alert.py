@@ -37,7 +37,7 @@ class Alert(commands.Cog):
         pop_time = pop_time.strftime('%Y-%m-%d %H:%M:%S')
         data_cum=data.cumsum(axis=1)
         category_names = ["VS", "NC", "TR", "NS"]
-        color = ["#612597", "#961100", "#1d4698", "#d3d3d3"]
+        color = ["#612597", "#1d4698", "#961100", "#d3d3d3"]
         lavel_color = ["#ffffff", "#ffffff", "#ffffff","#333333"]
         plt.figure()
         fig, ax = plt.subplots(figsize=(8, 1))
