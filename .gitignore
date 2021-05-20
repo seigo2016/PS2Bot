@@ -109,3 +109,4 @@ ps2bot/
 .DS_Store
 .vscode
 *.png
+*.old
