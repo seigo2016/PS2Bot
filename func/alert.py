@@ -26,10 +26,17 @@ class Alert(commands.Cog):
         self.server_id = int(config['Server']['Server_ID'])
         self.alert_channel_id = int(config['Channel']['Alert_Channel_ID'])
         self.population_url = "https://ps2.fisu.pw/api/population/?world=40"
+        self.status_api = "https://census.daybreakgames.com/s:seigo2016api/get/ps2/world?world_id=40"
         self.JST = timezone(timedelta(hours=+9), 'JST')
 
     @tasks.loop(minutes=5.0)
     async def notice_alert(self):
+        result = requests.get(self.status_api)
+        json_data = result.json()["world_list"][0]
+        server_status = json_data["state"]
+        status_emoji = ""
+        if server_status == "online":
+            status_emoji = ":green_circle:"
         result = requests.get(self.population_url)
         json_data = result.json()["result"][0]
         data = np.array([[json_data['vs'], json_data['nc'], json_data['tr'], json_data['ns']]])
@@ -59,7 +66,7 @@ class Alert(commands.Cog):
             sio.seek(0)
             em = discord.Embed(
                 title='Current Population (soltech)',
-                description=f"(Last Update  {pop_time})",
+                description=f"**Soltech**:  {server_status.upper()} {status_emoji}\n\n(Last Update  {pop_time})",
                 color=discord.Color.orange(),
             )
             em.set_image(
