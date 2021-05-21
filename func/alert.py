@@ -36,7 +36,7 @@ class Alert(commands.Cog):
         server_status = json_data["state"]
         status_emoji = ""
         if server_status == "online":
-            status_emoji = ":green_circle:"
+            status_emoji = ":blue_circle:"
         result = requests.get(self.population_url)
         json_data = result.json()["result"][0]
         data = np.array([[json_data['vs'], json_data['nc'], json_data['tr'], json_data['ns']]])
