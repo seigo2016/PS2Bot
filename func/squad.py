@@ -18,7 +18,6 @@ class ManageSquad(commands.Cog):
         self.server_id = int(config['Server']['Server_ID'])
         self.channel_id = int(config['Channel']['Squad_Role_Channel_ID'])
         self.role_message_id = int(config['Message']['Squad_Role_Message_ID'])
-        print("test")
 
     @commands.Cog.listener()
     async def on_ready(self):

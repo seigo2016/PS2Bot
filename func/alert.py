@@ -32,8 +32,9 @@ class Alert(commands.Cog):
     @tasks.loop(minutes=5.0)
     async def notice_alert(self):
         result = requests.get(self.status_api)
-        json_data = result.json()["world_list"][0]
-        server_status = json_data["state"]
+        print(result.json())
+        json_data = result.json()["game_server_status_list"][0]
+        server_status = json_data["last_reported_state"]
         status_emoji = ""
         if server_status != "down":
             status_emoji = ":blue_circle:"
@@ -61,7 +62,6 @@ class Alert(commands.Cog):
             ax.bar_label(rects, label_type='center', color=lavel_color[i])
         ax.legend(ncol=len(category_names), bbox_to_anchor=(1.2, 1), loc='upper right', borderaxespad=0, fontsize='small')
         ax.get_legend().remove()
-        
         with io.BytesIO() as sio:
             plt.savefig(sio, format="png")
             plt.close()
