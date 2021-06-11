@@ -3,10 +3,7 @@ import discord
 from discord.ext import commands
 
 import datetime
-from datetime import datetime as dt
-from datetime import date
 from pytz import timezone
-import time
 
 import os
 import configparser
