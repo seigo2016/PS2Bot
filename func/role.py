@@ -1,9 +1,8 @@
 # coding:utf-8
-from discord.ext import commands
 import discord
+from discord.ext import commands
 import configparser
 import os
-import time
 import asyncio
 
 class ManageRole(commands.Cog):
