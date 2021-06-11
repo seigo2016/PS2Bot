@@ -20,10 +20,10 @@ else:
 client = commands.Bot(command_prefix='')
 
 token = os.environ['token']
-role.setup(client, env)
+# role.setup(client, env)
 squad.setup(client, env)
-bot.setup(client, env)
-alert.setup(client, env)
+# bot.setup(client, env)
+# alert.setup(client, env)
 
 @client.event
 async def on_ready():
