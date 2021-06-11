@@ -4,9 +4,17 @@ import configparser
 import os
 from discord.ext import commands
 import asyncio
+from logging import getLogger, StreamHandler, DEBUG
+
+logger = getLogger(__name__)
+handler = StreamHandler()
+handler.setLevel(DEBUG)
+logger.setLevel(DEBUG)
+logger.addHandler(handler)
+logger.propagate = False
+
 
 class ManageSquad(commands.Cog):
-
     def __init__(self, bot, env):
         self.bot = bot
         current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -53,8 +61,11 @@ class ManageSquad(commands.Cog):
             self.squad_list[vc_ch.id]["msg_id"] = text_id
             for i in self.emoji.values():
                 await text.add_reaction(i)
+            logger.debug(f"[create squad vc channel] {self.squad_list}")
 
-        if before.channel and before.channel.id in self.squad_list:
+        if before.channel != None and before.channel.id in self.squad_list:
+            logger.debug(f"[member leave squad vc channel]{self.squad_list}")
+            logger.debug(f"[before vc channel info] member-count:{len(before.channel.members)}")
             if len(before.channel.members) == 0:
                 text_ch = self.bot.get_channel(self.squad_list[before.channel.id]["text_id"])
                 vc_ch = self.bot.get_channel(before.channel.id)
