@@ -1,5 +1,6 @@
 # coding:utf-8
 import os
+import discord
 from discord.ext import commands
 import argparse
 import func.role as role
@@ -17,7 +18,9 @@ if args.dev:
 else:
     env = "prod"
 
-client = commands.Bot(command_prefix='')
+intents = discord.Intents.default()
+intents.members = True
+client = commands.Bot(command_prefix='!', guild_subscriptions=True, intents=intents)
 
 token = os.environ['token']
 role.setup(client, env)
