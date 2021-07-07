@@ -1,4 +1,3 @@
-
 # coding:utf-8
 import discord
 from discord.ext import tasks, commands
@@ -31,19 +30,22 @@ class Alert(commands.Cog):
 
     @tasks.loop(minutes=5.0)
     async def notice_alert(self):
-        result = requests.get(self.status_api)
-        print(result.json())
-        json_data = result.json()["game_server_status_list"][0]
-        server_status = json_data["last_reported_state"]
+        status_result = requests.get(self.status_api)
+        if 'json' not in status_result.headers.get('content-type'):
+            exit()
+        status_json_data = status_result.json()["game_server_status_list"][0]
+        server_status = status_json_data["last_reported_state"]
         status_emoji = ""
         if server_status != "down":
             status_emoji = ":blue_circle:"
         elif server_status == "down":
             status_emoji = ":red_circle:"
-        result = requests.get(self.population_url)
-        json_data = result.json()["result"][0]
-        data = np.array([[json_data['vs'], json_data['nc'], json_data['tr'], json_data['ns']]])
-        pop_time = datetime.fromtimestamp(json_data['timestamp'], self.JST)
+        pop_result = requests.get(self.population_url)
+        print(f'alert_api_debug_message {pop_result}, {pop_result.json()}')
+        pop_json_data = pop_result.json()["result"][0]
+        
+        data = np.array([[pop_json_data['vs'], pop_json_data['nc'], pop_json_data['tr'], pop_json_data['ns']]])
+        pop_time = datetime.fromtimestamp(pop_json_data['timestamp'], self.JST)
         pop_time = pop_time.strftime('%Y-%m-%d %H:%M:%S')
         data_cum=data.cumsum(axis=1)
         category_names = ["VS", "NC", "TR", "NS"]
