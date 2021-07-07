@@ -10,7 +10,6 @@ import numpy as np
 import io
 
 class Alert(commands.Cog):
-
     def __init__(self, bot, env):
         self.bot = bot
         self.notice_alert.start()
