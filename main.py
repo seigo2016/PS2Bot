@@ -23,9 +23,9 @@ intents.members = True
 client = commands.Bot(command_prefix='!', guild_subscriptions=True, intents=intents)
 
 token = os.environ['token']
-#role.setup(client, env)
-#squad.setup(client, env)
-#bot.setup(client, env)
+role.setup(client, env)
+squad.setup(client, env)
+bot.setup(client, env)
 alert.setup(client, env)
 
 @client.event
