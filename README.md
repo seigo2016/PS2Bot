@@ -1,3 +1,3 @@
 # PS2Bot
 
-Discordの *PlanetSide2非公式JPコミュニティ* で稼働中のDiscordBot.
+DiscordのPlanetSide2非公式JPコミュニティで稼働中のDiscordBot.
