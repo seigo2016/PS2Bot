@@ -24,13 +24,13 @@ class Alert(commands.Cog):
         self.server_id = int(config['Server']['Server_ID'])
         self.alert_channel_id = int(config['Channel']['Alert_Channel_ID'])
         self.population_url = "https://ps2.fisu.pw/api/population/?world=40"
-        self.status_api = "https://census.daybreakgames.com/s:seigo2016api/get/global/game_server_status/?c:limit=10&game_code=ps2&name=SolTech%20(Asia)"
+        self.status_api = "https://census.daybreakgames.com/s:seigo2016/get/global/game_server_status/?c:limit=10&game_code=ps2&name=SolTech%20(Asia)"
         self.JST = timezone(timedelta(hours=+9), 'JST')
 
     @tasks.loop(minutes=5.0)
     async def notice_alert(self):
         status_result = requests.get(self.status_api)
-        if 'json' not in status_result.headers.get('content-type'):
+        if not 'json' in status_result.headers.get('content-type'):
             exit()
         status_json_data = status_result.json()["game_server_status_list"][0]
         server_status = status_json_data["last_reported_state"]
