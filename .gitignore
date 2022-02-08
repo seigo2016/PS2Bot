@@ -106,7 +106,9 @@ venv.bak/
 token.ini
 
 ps2bot/
+ps2bot-pycord/
 .DS_Store
 .vscode
 *.png
 *.old
+
