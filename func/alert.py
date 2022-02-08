@@ -23,8 +23,8 @@ class Alert(commands.Cog):
 
         self.server_id = int(config['Server']['Server_ID'])
         self.alert_channel_id = int(config['Channel']['Alert_Channel_ID'])
-        self.population_url = "https://ps2.fisu.pw/api/population/?world=40"
-        self.status_api = "https://census.daybreakgames.com/s:seigo2016/get/global/game_server_status/?c:limit=10&game_code=ps2&name=SolTech%20(Asia)"
+        self.population_url = config['API']['CENSUS_API_ENDPOINT']
+        self.status_api = config['API']['FISU_API_ENDPOINT']
         self.JST = timezone(timedelta(hours=+9), 'JST')
 
     @tasks.loop(minutes=5.0)
@@ -84,4 +84,5 @@ class Alert(commands.Cog):
         await self.bot.wait_until_ready()
 
 def setup(bot, env):
-    bot.add_cog(Alert(bot, env))
+    if env != "dev":
+        bot.add_cog(Alert(bot, env))

@@ -4,11 +4,13 @@ import configparser
 import os
 from discord.ext import commands
 import asyncio
+import dill
 
-
+# dill.detect.trace(True) 
 
 class ManageSquad(commands.Cog):
     def __init__(self, bot, env):
+        self.env = env
         self.bot = bot
         current_dir = os.path.dirname(os.path.abspath(__file__))
         config = configparser.ConfigParser()
@@ -19,11 +21,16 @@ class ManageSquad(commands.Cog):
         self.server_id = int(config['Server']['Server_ID'])
         self.channel_id = int(config['Channel']['Squad_Role_Channel_ID'])
         self.role_message_id = int(config['Message']['Squad_Role_Message_ID'])
+    
 
     @commands.Cog.listener()
     async def on_ready(self):
+        self.squad_status_bin = 'squad_status.dill'
         self.server = self.bot.get_guild(self.server_id)
         self.squad_list = {}
+        if os.path.isfile(self.squad_status_bin):
+            with open(self.squad_status_bin, 'rb') as d:
+                self.squad_list = dill.load(d)
         self.mention_message = {}
         self.emoji = {}
         self.emoji_id = {"NC":384317676870303745, "TR": 384317719098425347, "VS": 384317750593585152, "NS": 653944468356988938}
@@ -36,9 +43,10 @@ class ManageSquad(commands.Cog):
         self.role["TR"] =  self.server.get_role(762873053541433368)
         self.role["VS"] =  self.server.get_role(762873057064648735)
         self.role["NS"] =  self.server.get_role(762874007926079488)
-        self.role_message = await self.bot.get_guild(self.server_id).get_channel(self.channel_id).fetch_message(self.role_message_id)
-        for i in self.emoji.values():
-            await self.role_message.add_reaction(i)
+        if self.env == "prod":
+            self.role_message = await self.bot.get_guild(self.server_id).get_channel(self.channel_id).fetch_message(self.role_message_id)
+            for i in self.emoji.values():
+                await self.role_message.add_reaction(i)
 
 
     @commands.Cog.listener()
@@ -46,7 +54,7 @@ class ManageSquad(commands.Cog):
         if "squad-lobby" in str(after.channel):
             vc_ch = await self.server.create_voice_channel("squad", category=after.channel.category)
             text_ch = await self.server.create_text_channel("squad", category=after.channel.category)
-            self.squad_list.update({vc_ch.id:{"text_id":text_ch.id, "msg_id":"", "user":member}})
+            self.squad_list.update({vc_ch.id:{"text_id":text_ch.id, "msg_id":"", "user_id":member.id}})
             body = f"{member.mention}\n 小隊が編成されました。\n勢力を選択してください\n"
             await member.move_to(vc_ch)
             text = await text_ch.send(body)
@@ -54,17 +62,18 @@ class ManageSquad(commands.Cog):
             self.squad_list[vc_ch.id]["msg_id"] = text_id
             for i in self.emoji.values():
                 await text.add_reaction(i)
-            print(f"[create squad vc channel] {self.squad_list}")
+            with open(self.squad_status_bin, 'wb') as d:
+                dill.dump(self.squad_list, d)
 
         if before.channel != None and before.channel.id in self.squad_list:
-            print(f"[member leave squad vc channel]{self.squad_list}")
-            print(f"[before vc channel info] member-count:{len(before.channel.members)}")
             if len(before.channel.members) == 0:
                 text_ch = self.bot.get_channel(self.squad_list[before.channel.id]["text_id"])
                 vc_ch = self.bot.get_channel(before.channel.id)
                 self.squad_list.pop(before.channel.id)
                 await vc_ch.delete()
                 await text_ch.delete()
+            with open(self.squad_status_bin, 'wb') as d:
+                dill.dump(self.squad_list, d)
 
 
     @commands.Cog.listener()
@@ -100,7 +109,7 @@ class ManageSquad(commands.Cog):
             for vc_id, squad in self.squad_list.items():
                 if squad["text_id"] == payload.channel_id:
                     user = self.server.get_member(payload.user_id)
-                    if user == squad["user"]:
+                    if user.id == squad["user_id"]:
                         power_name = power_emoji[payload.emoji.id]
                         name = "{}_squad{}".format(power_name, power_color[power_name])
                         vc_ch = self.bot.get_channel(vc_id)
