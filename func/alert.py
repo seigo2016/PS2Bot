@@ -65,7 +65,7 @@ class Alert(commands.Cog):
         ax.get_legend().remove()
         with io.BytesIO() as sio:
             plt.savefig(sio, format="png")
-            plt.close()
+            plt.close('all')
             sio.seek(0)
             em = discord.Embed(
                 title='Current Population (soltech)',
