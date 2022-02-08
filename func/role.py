@@ -7,6 +7,7 @@ import asyncio
 
 class ManageRole(commands.Cog):
     def __init__(self, bot, env):
+        self.env = env
         self.bot = bot
         current_dir = os.path.dirname(os.path.abspath(__file__))
         config = configparser.ConfigParser()
@@ -30,9 +31,10 @@ class ManageRole(commands.Cog):
             emoji_main_jpc: 'Mercenary', emoji_main_nc: 'MainNC', emoji_main_tr: 'MainTR', emoji_main_vs: 'MainVS',\
             emoji_main_ns: 'NS', '🟦': 'NC', '🟥': 'TR', '🟪': 'VS',\
             '1️⃣': 'Soltech', '2️⃣': 'Connery', '3️⃣': 'Emerald', '4️⃣': 'Miller'}
-        self.fixed_message = await self.bot.get_guild(self.server_id).get_channel(self.role_channel_id).fetch_message(self.message_id)
-        for emoji_name in self.emoji_role.keys():
-            await self.fixed_message.add_reaction(emoji_name)
+        if self.env == "prod":
+            self.fixed_message = await self.bot.get_guild(self.server_id).get_channel(self.role_channel_id).fetch_message(self.message_id)
+            for emoji_name in self.emoji_role.keys():
+                await self.fixed_message.add_reaction(emoji_name)
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
