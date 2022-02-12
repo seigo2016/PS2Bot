@@ -61,9 +61,7 @@ class ManageRole(commands.Cog):
                     await payload.member.add_roles(select_role)
                     body = f"`{payload.member}` さんに  `{select_role}` 役職を追加しました \n(このメッセージは一定時間で消去されます)"
                 await self.fixed_message.remove_reaction(payload.emoji, payload.member)
-                reply_message = await self.bot.get_guild(self.server_id).get_channel(self.role_channel_id).send(body)
-                await asyncio.sleep(30)
-                await reply_message.delete()
+                await self.bot.get_guild(self.server_id).get_channel(self.role_channel_id).send(body, delete_after=20)
 
 def setup(bot, env):
     bot.add_cog(ManageRole(bot, env))
