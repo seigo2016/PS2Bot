@@ -41,7 +41,7 @@ class JoinMember(commands.Cog):
         await member.add_roles(default_role)
 
     @commands.command()
-    async def now(self, ctx, *, member: discord.Member = None):
+    async def now(self, ctx):
         utc = timezone('UTC')
         pst = timezone('America/Los_Angeles')
         now_time_jst = datetime.datetime.now()
