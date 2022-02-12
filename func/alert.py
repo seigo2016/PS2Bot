@@ -85,11 +85,6 @@ class Alert(commands.Cog):
             await self.bot.get_guild(self.server_id).get_channel(self.alert_channel_id).purge(limit=1)
             await self.bot.get_guild(self.server_id).get_channel(self.alert_channel_id).send(embed=em, file=discord.File(sio, filename='image.png'))
 
-    @notice_alert.before_loop
-    async def before_ready(self):
-        print('waiting...')
-        await self.bot.wait_until_ready()
-
 def setup(bot, env):
     if env != "dev":
         bot.add_cog(Alert(bot, env))
