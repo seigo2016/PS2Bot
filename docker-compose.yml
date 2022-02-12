@@ -1,0 +1,12 @@
+services:
+  ps2bot:
+    container_name: "ps2bot"
+    build: .
+    restart: always
+    tty: true
+    volumes:
+      - ps2bot_data:/app/data/
+    env_file:
+      - .env
+volumes:
+  ps2bot_data:

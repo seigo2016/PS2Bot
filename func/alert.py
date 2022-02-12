@@ -15,7 +15,7 @@ class Alert(commands.Cog):
         self.notice_alert.start()
 
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        config = configparser.ConfigParser()
+        config = configparser.ConfigParser(interpolation=None)
         if env == "dev":
             config.read(current_dir + "/../config-dev.ini")
         else:
@@ -23,13 +23,17 @@ class Alert(commands.Cog):
 
         self.server_id = int(config['Server']['Server_ID'])
         self.alert_channel_id = int(config['Channel']['Alert_Channel_ID'])
-        self.population_url = config['API']['CENSUS_API_ENDPOINT']
-        self.status_api = config['API']['FISU_API_ENDPOINT']
+        self.population_url = config['API']['FISU_API_ENDPOINT']
+        self.status_api_url = config['API']['CENSUS_API_ENDPOINT']
         self.JST = timezone(timedelta(hours=+9), 'JST')
 
     @tasks.loop(minutes=5.0)
     async def notice_alert(self):
-        status_result = requests.get(self.status_api)
+        params = {
+            "game_code": "ps2",
+            "name": "SolTech (Asia)"
+        }
+        status_result = requests.get(self.status_api_url, params=params)
         if not 'json' in status_result.headers.get('content-type'):
             exit()
         status_json_data = status_result.json()["game_server_status_list"][0]
@@ -40,7 +44,7 @@ class Alert(commands.Cog):
         elif server_status == "down":
             status_emoji = ":red_circle:"
         pop_result = requests.get(self.population_url)
-        print(f'alert_api_debug_message {pop_result}, {pop_result.json()}')
+#        print(f'alert_api_debug_message {pop_result}, {pop_result.json()}')
         pop_json_data = pop_result.json()["result"][0]
         
         data = np.array([[pop_json_data['vs'], pop_json_data['nc'], pop_json_data['tr'], pop_json_data['ns']]])

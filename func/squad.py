@@ -12,12 +12,12 @@ class ManageSquad(commands.Cog):
     def __init__(self, bot, env):
         self.env = env
         self.bot = bot
-        current_dir = os.path.dirname(os.path.abspath(__file__))
+        self.current_dir = os.path.dirname(os.path.abspath(__file__))
         config = configparser.ConfigParser()
         if env == "dev":
-            config.read(current_dir + "/../config-dev.ini")
+            config.read(self.current_dir + "/../config-dev.ini")
         else:
-            config.read(current_dir + "/../config.ini")
+            config.read(self.current_dir + "/../config.ini")
         self.server_id = int(config['Server']['Server_ID'])
         self.channel_id = int(config['Channel']['Squad_Role_Channel_ID'])
         self.role_message_id = int(config['Message']['Squad_Role_Message_ID'])
@@ -25,7 +25,7 @@ class ManageSquad(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        self.squad_status_bin = 'squad_status.dill'
+        self.squad_status_bin = self.current_dir + '/../data/squad_status.dill'
         self.server = self.bot.get_guild(self.server_id)
         self.squad_list = {}
         if os.path.isfile(self.squad_status_bin):
