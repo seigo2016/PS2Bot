@@ -93,10 +93,8 @@ class ManageSquad(commands.Cog):
                 else:
                     await payload.member.add_roles(select_role)
                     body = f"`{payload.member}` さんに  `{select_role}` 役職を追加しました \n(このメッセージは一定時間で消去されます)"
-                reply_message = await squad_role_ch.send(body)
+                await squad_role_ch.send(body, delete_after=20)
                 await self.role_message.remove_reaction(payload.emoji, payload.member)
-                await asyncio.sleep(30)
-                await reply_message.delete()
         elif payload.message_id in self.mention_message:
             if payload.emoji.name == "🇾":
                 text_ch  = self.bot.get_channel(payload.channel_id)

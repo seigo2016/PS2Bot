@@ -27,6 +27,10 @@ class Alert(commands.Cog):
         self.status_api_url = config['API']['CENSUS_API_ENDPOINT']
         self.JST = timezone(timedelta(hours=+9), 'JST')
 
+    # @commands.Cog.listener()
+    # async def on_ready(self):
+    #     self.alert_message = await self.bot.get_guild(self.server_id).get_channel(self.alert_channel_id).fetch_message("942022218337099797")
+
     @tasks.loop(minutes=5.0)
     async def notice_alert(self):
         params = {
@@ -44,7 +48,6 @@ class Alert(commands.Cog):
         elif server_status == "down":
             status_emoji = ":red_circle:"
         pop_result = requests.get(self.population_url)
-#        print(f'alert_api_debug_message {pop_result}, {pop_result.json()}')
         pop_json_data = pop_result.json()["result"][0]
         
         data = np.array([[pop_json_data['vs'], pop_json_data['nc'], pop_json_data['tr'], pop_json_data['ns']]])
