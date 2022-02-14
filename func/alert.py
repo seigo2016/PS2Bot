@@ -2,7 +2,7 @@
 import discord
 from discord.ext import tasks, commands
 import configparser
-from datetime import datetime, timedelta, timezone
+from datetime import datetime
 import os
 import requests
 import matplotlib.pyplot as plt
@@ -12,8 +12,6 @@ import io
 class Alert(commands.Cog):
     def __init__(self, bot, env):
         self.bot = bot
-        self.notice_alert.start()
-
         current_dir = os.path.dirname(os.path.abspath(__file__))
         config = configparser.ConfigParser(interpolation=None)
         if env == "dev":
@@ -25,6 +23,10 @@ class Alert(commands.Cog):
         self.alert_channel_id = int(config['Channel']['Alert_Channel_ID'])
         self.population_url = config['API']['FISU_API_ENDPOINT']
         self.status_api_url = config['API']['CENSUS_API_ENDPOINT']
+
+    @commands.Cog.listener()
+    async def on_ready(self):  
+        self.notice_alert.start()
 
     @tasks.loop(minutes=5.0)
     async def notice_alert(self):
@@ -81,5 +83,4 @@ class Alert(commands.Cog):
             await self.bot.get_guild(self.server_id).get_channel(self.alert_channel_id).send(embed=em, file=discord.File(sio, filename='image.png'))
 
 def setup(bot, env):
-    if env == "prod":
-        bot.add_cog(Alert(bot, env))
+    bot.add_cog(Alert(bot, env))
