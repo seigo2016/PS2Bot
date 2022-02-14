@@ -7,6 +7,7 @@ import func.role as role
 import func.squad as squad
 import func.alert as alert
 import func.bot as bot
+import func.outfit_event as outfit_event
 
 parser = argparse.ArgumentParser()
 
@@ -23,10 +24,11 @@ intents.members = True
 client = commands.Bot(command_prefix='!', guild_subscriptions=True, intents=intents)
 
 token = os.environ['token']
-role.setup(client, env)
-squad.setup(client, env)
-bot.setup(client, env)
-alert.setup(client, env)
+# role.setup(client, env)
+# squad.setup(client, env)
+# bot.setup(client, env)
+# alert.setup(client, env)
+outfit_event.setup(client, env)
 
 @client.event
 async def on_ready():
