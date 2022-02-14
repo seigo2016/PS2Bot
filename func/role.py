@@ -3,7 +3,6 @@ import discord
 from discord.ext import commands
 import configparser
 import os
-import asyncio
 
 class ManageRole(commands.Cog):
     def __init__(self, bot, env):

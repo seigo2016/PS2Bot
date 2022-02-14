@@ -25,11 +25,6 @@ class Alert(commands.Cog):
         self.alert_channel_id = int(config['Channel']['Alert_Channel_ID'])
         self.population_url = config['API']['FISU_API_ENDPOINT']
         self.status_api_url = config['API']['CENSUS_API_ENDPOINT']
-        self.JST = timezone(timedelta(hours=+9), 'JST')
-
-    # @commands.Cog.listener()
-    # async def on_ready(self):
-    #     self.alert_message = await self.bot.get_guild(self.server_id).get_channel(self.alert_channel_id).fetch_message("942022218337099797")
 
     @tasks.loop(minutes=5.0)
     async def notice_alert(self):
@@ -51,8 +46,7 @@ class Alert(commands.Cog):
         pop_json_data = pop_result.json()["result"][0]
         
         data = np.array([[pop_json_data['vs'], pop_json_data['nc'], pop_json_data['tr'], pop_json_data['ns']]])
-        pop_time = datetime.fromtimestamp(pop_json_data['timestamp'], self.JST)
-        pop_time = pop_time.strftime('%Y-%m-%d %H:%M:%S')
+        pop_time = datetime.utcfromtimestamp(pop_json_data['timestamp'])
         data_cum=data.cumsum(axis=1)
         category_names = ["VS", "NC", "TR", "NS"]
         color = ["#612597", "#1d4698", "#961100", "#d3d3d3"]
@@ -76,8 +70,9 @@ class Alert(commands.Cog):
             sio.seek(0)
             em = discord.Embed(
                 title='Current Population (soltech)',
-                description=f"**Soltech**:  {server_status.upper()} {status_emoji}\n\n(Last Update  {pop_time})",
+                description=f"**Soltech**:  {server_status.upper()} {status_emoji}",
                 color=discord.Color.orange(),
+                timestamp=pop_time
             )
             em.set_image(
                 url="attachment://image.png"
@@ -86,5 +81,5 @@ class Alert(commands.Cog):
             await self.bot.get_guild(self.server_id).get_channel(self.alert_channel_id).send(embed=em, file=discord.File(sio, filename='image.png'))
 
 def setup(bot, env):
-    if env != "dev":
+    if env == "prod":
         bot.add_cog(Alert(bot, env))
