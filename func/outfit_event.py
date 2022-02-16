@@ -46,7 +46,7 @@ class Event(commands.Cog):
                     elif body["outfit_id"] == outfit_id:
                         if body["new_faction_id"] == ["old_faction_id"]:
                             continue
-                        elif body["new_faction_id"] != "1":
+                        elif body["new_faction_id"] != "2":
                             continue
                         self.status_api_url = "https://census.daybreakgames.com/get/ps2:v2/map_region"
                         params ={

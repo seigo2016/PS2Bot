@@ -2,9 +2,6 @@
 import discord
 from discord.ext import commands
 
-import datetime
-from pytz import timezone
-
 import os
 import configparser
 
@@ -40,16 +37,6 @@ class JoinMember(commands.Cog):
         await self.bot.get_guild(self.server_id).get_channel(self.irassyai_channel_id).send(message_body)
         await member.add_roles(default_role)
 
-    @commands.command()
-    async def now(self, ctx):
-        utc = timezone('UTC')
-        pst = timezone('America/Los_Angeles')
-        now_time_jst = datetime.datetime.now()
-        now_time_pst = now_time_jst.astimezone(pst)
-        now_time_utc = now_time_jst.astimezone(utc)
-        body = (":flag_jp:(JP)JST   {}\n:flag_us:(US)PST  {}\n:flag_gb:(UK)UTC {}")\
-            .format(now_time_jst.strftime('%X'), now_time_pst.strftime('%X'), now_time_utc.strftime('%X'))
-        await ctx.send(body)
 
 def setup(bot, env):
     bot.add_cog(JoinMember(bot, env))
