@@ -25,7 +25,11 @@ class Event(commands.Cog):
         
     @commands.Cog.listener()
     async def on_ready(self):
-        await self.stream()
+        while True:
+            try:
+                await self.stream()
+            except requests.exceptions.ConnectionError as e:
+                print(e)
 
     async def stream(self):
         self.path = "wss://push.planetside2.com/streaming?environment=ps2&service-id=s:seigo2016"
