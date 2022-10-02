@@ -5,8 +5,6 @@ import os
 from discord.ext import commands
 import dill
 
-# dill.detect.trace(True) 
-
 class ManageSquad(commands.Cog):
     def __init__(self, bot, env):
         self.env = env
