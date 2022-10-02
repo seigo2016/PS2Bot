@@ -70,8 +70,6 @@ class Event(commands.Cog):
                     continue
                 
                 print(resp)
-                
-                
 
 def setup(bot, env):
     bot.add_cog(Event(bot, env))
