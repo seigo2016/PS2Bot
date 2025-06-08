@@ -1,5 +1,4 @@
 # coding:utf-8
-import discord
 import configparser
 import os
 from discord.ext import commands
