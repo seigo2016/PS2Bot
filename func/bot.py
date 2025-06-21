@@ -30,7 +30,13 @@ class JoinMember(commands.Cog):
         zatsudan_channel = self.bot.get_guild(self.server_id).get_channel(self.zatsudan_channel_id)
         role_channel = self.bot.get_guild(self.server_id).get_channel(self.role_channel_id)
         with open(self.current_dir + "/../message_template/irassyai.txt", "r") as f:
-            message_body = f.read()
+            message_body = """{user}、当サーバーに参加して頂きありがとうございます！
+{readme}をお読みの上、 {role_management} で役職を設定してください。
+初心者でどうすればいいか分からないという方は、{zatsudan} で質問してくださればサポート致します！
+
+上記内容が終わった方は、{zatsudan} でご挨拶をして下さるといい感じになるかもしれません！
+それでは、よいPlanetSide 2ライフを！
+"""
         message_body = message_body.format(user=member.mention, readme=readme_channnel.mention, zatsudan=zatsudan_channel.mention, role_management=role_channel.mention)
         default_role = discord.utils.get(self.bot.get_guild(self.server_id).roles, name="参加者")
         await self.bot.get_guild(self.server_id).get_channel(self.irassyai_channel_id).send(message_body)
