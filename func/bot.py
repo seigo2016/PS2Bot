@@ -29,8 +29,7 @@ class JoinMember(commands.Cog):
         readme_channnel = self.bot.get_guild(self.server_id).get_channel(self.readme_channel_id)
         zatsudan_channel = self.bot.get_guild(self.server_id).get_channel(self.zatsudan_channel_id)
         role_channel = self.bot.get_guild(self.server_id).get_channel(self.role_channel_id)
-        with open(self.current_dir + "/../message_template/irassyai.txt", "r") as f:
-            message_body = """{user}、当サーバーに参加して頂きありがとうございます！
+        message_body = """{user}、当サーバーに参加して頂きありがとうございます！
 {readme}をお読みの上、 {role_management} で役職を設定してください。
 初心者でどうすればいいか分からないという方は、{zatsudan} で質問してくださればサポート致します！
 
