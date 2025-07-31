@@ -29,7 +29,7 @@ class ManageRole(commands.Cog):
         self.emoji_role = {
             emoji_main_jpc: 'Mercenary', emoji_main_nc: 'MainNC', emoji_main_tr: 'MainTR', emoji_main_vs: 'MainVS',\
             emoji_main_ns: 'NS', '🟦': 'NC', '🟥': 'TR', '🟪': 'VS',\
-            '1️⃣': 'Soltech', '2️⃣': 'Connery', '3️⃣': 'Emerald', '4️⃣': 'Miller'}
+            '1️⃣': 'Soltech', '2️⃣': 'Osprey', '3️⃣': 'Wainwright'}
         if self.env == "prod":
             self.fixed_message = await self.bot.get_guild(self.server_id).get_channel(self.role_channel_id).fetch_message(self.message_id)
             for emoji_name in self.emoji_role.keys():
