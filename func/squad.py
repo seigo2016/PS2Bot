@@ -5,6 +5,10 @@ from discord.ext import commands
 import dill
 
 class ManageSquad(commands.Cog):
+    # State constants
+    STATE_FACTION_SELECTION = "faction_selection"
+    STATE_SERVER_SELECTION = "server_selection"
+    STATE_COMPLETED = "completed"
     def __init__(self, bot, env):
         self.env = env
         self.bot = bot
@@ -34,6 +38,8 @@ class ManageSquad(commands.Cog):
         self.emoji["TR"] = self.bot.get_emoji(self.emoji_id["TR"])
         self.emoji["VS"] = self.bot.get_emoji(self.emoji_id["VS"])
         self.emoji["NS"] = self.bot.get_emoji(self.emoji_id["NS"])
+        # Server selection emojis (using Unicode emojis)
+        self.server_emoji = {"1️⃣": "Soltech", "2️⃣": "Osprey", "3️⃣": "Wainwright"}
         self.role = {}
         self.role["NC"] = self.server.get_role(762872826331136020)
         self.role["TR"] =  self.server.get_role(762873053541433368)
@@ -44,13 +50,67 @@ class ManageSquad(commands.Cog):
             for i in self.emoji.values():
                 await self.role_message.add_reaction(i)
 
+    async def _update_channels_name(self, vc_id, text_id, name):
+        """Helper method to update both voice and text channel names"""
+        vc_ch = self.bot.get_channel(vc_id)
+        text_ch = self.bot.get_channel(text_id)
+        await text_ch.edit(name=name)
+        await vc_ch.edit(name=name)
+
+    async def _setup_server_selection(self, text_ch):
+        """Helper method to setup server selection message and reactions"""
+        await text_ch.send("サーバーを選択してください\n1️⃣: Soltech\n2️⃣: Osprey\n3️⃣: Wainwright")
+        server_message = await text_ch.fetch_message(text_ch.last_message_id)
+        for emoji in self.server_emoji.keys():
+            await server_message.add_reaction(emoji)
+        return server_message.id
+
+    async def _setup_mention_selection(self, text_ch, faction):
+        """Helper method to setup mention selection message and reactions"""
+        mention_text = await text_ch.send("メンションを送りますか？")
+        await mention_text.add_reaction("🇾")
+        await mention_text.add_reaction("🇳")
+        self.mention_message.update({mention_text.id: faction})
+
+    async def _handle_faction_selection(self, vc_id, payload, power_emoji):
+        """Handle faction selection logic"""
+        power_name = power_emoji[payload.emoji.id]
+        
+        # Update squad info with selected faction
+        self.squad_list[vc_id]["faction"] = power_name
+        self.squad_list[vc_id]["state"] = self.STATE_SERVER_SELECTION
+        
+        text_ch = self.bot.get_channel(payload.channel_id)
+        server_msg_id = await self._setup_server_selection(text_ch)
+        
+        # Update message ID to track server selection message
+        self.squad_list[vc_id]["server_msg_id"] = server_msg_id
+
+    async def _handle_server_selection(self, vc_id, payload, power_color):
+        """Handle server selection logic"""
+        server_name = self.server_emoji[payload.emoji.name]
+        faction = self.squad_list[vc_id]["faction"]
+        power_color_emoji = power_color[faction]
+        
+        # Update squad info with selected server
+        self.squad_list[vc_id]["server"] = server_name
+        self.squad_list[vc_id]["state"] = self.STATE_COMPLETED
+        
+        # Create final channel name with faction and server
+        name = f"{faction}_{server_name}_squad{power_color_emoji}"
+        await self._update_channels_name(vc_id, payload.channel_id, name)
+        
+        # Ask about mention functionality
+        text_ch = self.bot.get_channel(payload.channel_id)
+        await self._setup_mention_selection(text_ch, faction)
+
 
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
         if "squad-lobby" in str(after.channel):
             vc_ch = await self.server.create_voice_channel("squad", category=after.channel.category)
             text_ch = await self.server.create_text_channel("squad", category=after.channel.category)
-            self.squad_list.update({vc_ch.id:{"text_id":text_ch.id, "msg_id":"", "user_id":member.id}})
+            self.squad_list.update({vc_ch.id:{"text_id":text_ch.id, "msg_id":"", "user_id":member.id, "state":self.STATE_FACTION_SELECTION, "faction":"", "server":""}})
             body = f"{member.mention}\n 小隊が編成されました。\n勢力を選択してください\n"
             await member.move_to(vc_ch)
             text = await text_ch.send(body)
@@ -104,16 +164,17 @@ class ManageSquad(commands.Cog):
                 if squad["text_id"] == payload.channel_id:
                     user = self.server.get_member(payload.user_id)
                     if user.id == squad["user_id"]:
-                        power_name = power_emoji[payload.emoji.id]
-                        name = "{}_squad{}".format(power_name, power_color[power_name])
-                        vc_ch = self.bot.get_channel(vc_id)
-                        text_ch  = self.bot.get_channel(payload.channel_id)
-                        await text_ch.edit(name=name)
-                        await vc_ch.edit(name=name)
-                        mention_text = await text_ch.send("メンションを送りますか？")
-                        await mention_text.add_reaction("🇾")
-                        await mention_text.add_reaction("🇳")
-                        self.mention_message.update({mention_text.id: power_name})
+                        # Handle faction selection
+                        if squad["state"] == self.STATE_FACTION_SELECTION and payload.emoji.id in power_emoji:
+                            await self._handle_faction_selection(vc_id, payload, power_emoji)
+                        
+                        # Handle server selection
+                        elif squad["state"] == self.STATE_SERVER_SELECTION and payload.emoji.name in self.server_emoji:
+                            await self._handle_server_selection(vc_id, payload, power_color)
+                        
+                        # Save updated squad list
+                        with open(self.squad_status_bin, 'wb') as d:
+                            dill.dump(self.squad_list, d)
 
 def setup(bot, env):
     bot.add_cog(ManageSquad(bot, env))
