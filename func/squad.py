@@ -34,6 +34,8 @@ class ManageSquad(commands.Cog):
         self.emoji["TR"] = self.bot.get_emoji(self.emoji_id["TR"])
         self.emoji["VS"] = self.bot.get_emoji(self.emoji_id["VS"])
         self.emoji["NS"] = self.bot.get_emoji(self.emoji_id["NS"])
+        # Server selection emojis (using Unicode emojis)
+        self.server_emoji = {"1️⃣": "Soltech", "2️⃣": "Osprey", "3️⃣": "Wainwright"}
         self.role = {}
         self.role["NC"] = self.server.get_role(762872826331136020)
         self.role["TR"] =  self.server.get_role(762873053541433368)
@@ -50,7 +52,7 @@ class ManageSquad(commands.Cog):
         if "squad-lobby" in str(after.channel):
             vc_ch = await self.server.create_voice_channel("squad", category=after.channel.category)
             text_ch = await self.server.create_text_channel("squad", category=after.channel.category)
-            self.squad_list.update({vc_ch.id:{"text_id":text_ch.id, "msg_id":"", "user_id":member.id}})
+            self.squad_list.update({vc_ch.id:{"text_id":text_ch.id, "msg_id":"", "user_id":member.id, "state":"faction_selection", "faction":"", "server":""}})
             body = f"{member.mention}\n 小隊が編成されました。\n勢力を選択してください\n"
             await member.move_to(vc_ch)
             text = await text_ch.send(body)
@@ -104,16 +106,51 @@ class ManageSquad(commands.Cog):
                 if squad["text_id"] == payload.channel_id:
                     user = self.server.get_member(payload.user_id)
                     if user.id == squad["user_id"]:
-                        power_name = power_emoji[payload.emoji.id]
-                        name = "{}_squad{}".format(power_name, power_color[power_name])
-                        vc_ch = self.bot.get_channel(vc_id)
-                        text_ch  = self.bot.get_channel(payload.channel_id)
-                        await text_ch.edit(name=name)
-                        await vc_ch.edit(name=name)
-                        mention_text = await text_ch.send("メンションを送りますか？")
-                        await mention_text.add_reaction("🇾")
-                        await mention_text.add_reaction("🇳")
-                        self.mention_message.update({mention_text.id: power_name})
+                        # Check if we're in faction selection state
+                        if squad["state"] == "faction_selection" and payload.emoji.id in power_emoji:
+                            power_name = power_emoji[payload.emoji.id]
+                            power_color_emoji = power_color[power_name]
+                            # Update squad info with selected faction
+                            self.squad_list[vc_id]["faction"] = power_name
+                            self.squad_list[vc_id]["state"] = "server_selection"
+                            
+                            text_ch = self.bot.get_channel(payload.channel_id)
+                            await text_ch.send("サーバーを選択してください\n1️⃣: Soltech\n2️⃣: Osprey\n3️⃣: Wainwright")
+                            
+                            # Add server selection emojis
+                            server_message = await text_ch.fetch_message(text_ch.last_message_id)
+                            for emoji in self.server_emoji.keys():
+                                await server_message.add_reaction(emoji)
+                            
+                            # Update message ID to track server selection message
+                            self.squad_list[vc_id]["server_msg_id"] = server_message.id
+                            
+                        # Check if we're in server selection state
+                        elif squad["state"] == "server_selection" and payload.emoji.name in self.server_emoji:
+                            server_name = self.server_emoji[payload.emoji.name]
+                            faction = squad["faction"]
+                            power_color_emoji = power_color[faction]
+                            
+                            # Update squad info with selected server
+                            self.squad_list[vc_id]["server"] = server_name
+                            self.squad_list[vc_id]["state"] = "completed"
+                            
+                            # Create final channel name with faction and server
+                            name = f"{faction}_{server_name}_squad{power_color_emoji}"
+                            vc_ch = self.bot.get_channel(vc_id)
+                            text_ch = self.bot.get_channel(payload.channel_id)
+                            await text_ch.edit(name=name)
+                            await vc_ch.edit(name=name)
+                            
+                            # Ask about mention functionality
+                            mention_text = await text_ch.send("メンションを送りますか？")
+                            await mention_text.add_reaction("🇾")
+                            await mention_text.add_reaction("🇳")
+                            self.mention_message.update({mention_text.id: faction})
+                        
+                        # Save updated squad list
+                        with open(self.squad_status_bin, 'wb') as d:
+                            dill.dump(self.squad_list, d)
 
 def setup(bot, env):
     bot.add_cog(ManageSquad(bot, env))
