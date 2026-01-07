@@ -10,3 +10,16 @@ dependencies = [
     "matplotlib>=3.10.3",
     "dill>=0.4.0",
 ]
+
+[dependency-groups]
+dev = ["ty>=0.0.1a8"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.ty.environment]
+python-version = "3.12"
