@@ -1,5 +1,6 @@
-FROM python:3.12-slim
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 WORKDIR /app/
+COPY pyproject.toml uv.lock ./
+RUN uv sync --frozen --no-dev
 COPY . .
-RUN python -m pip install -r requirements.txt
-CMD [ "python", "main.py" ]
+CMD ["uv", "run", "python", "main.py"]
