@@ -1,0 +1,12 @@
+[project]
+name = "ps2bot"
+version = "1.0.0"
+description = "Discord bot for PlanetSide 2"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "py-cord>=2.6.1",
+    "requests>=2.32.4",
+    "matplotlib>=3.10.3",
+    "dill>=0.4.0",
+]
