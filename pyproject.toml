@@ -5,14 +5,14 @@ description = "Discord bot for PlanetSide 2"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "py-cord>=2.7.2",
-    "requests>=2.32.4",
-    "matplotlib>=3.10.9",
+    "py-cord>=2.8.1",
+    "requests>=2.34.2",
+    "matplotlib>=3.11.1",
     "dill>=0.4.0",
 ]
 
 [dependency-groups]
-dev = ["ty>=0.0.33"]
+dev = ["ty>=0.0.70"]
 
 [tool.ruff]
 target-version = "py312"
