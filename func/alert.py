@@ -33,8 +33,8 @@ class Alert(commands.Cog):
     async def notice_alert(self):
         params = {"game_code": "ps2", "name": "SolTech (Asia)"}
         status_result = requests.get(self.status_api_url, params=params)
-        if "json" not in status_result.headers.get("content-type"):
-            exit()
+        if "json" not in status_result.headers.get("content-type", ""):
+            return
         status_json_data = status_result.json()["game_server_status_list"][0]
         server_status = status_json_data["last_reported_state"]
         status_emoji = ""
